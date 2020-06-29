@@ -1,4 +1,4 @@
-package Login;
+
 
 import javax.swing.JOptionPane;
 
@@ -12,6 +12,10 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         jtfName.grabFocus();
+        
+        //set the background to transparent
+        jtfName.setBackground(new java.awt.Color(0, 0, 0, 1));
+        jpfPassword.setBackground(new java.awt.Color(0, 0, 0, 1));
     }
 
     @SuppressWarnings("unchecked")
@@ -27,18 +31,30 @@ public class Login extends javax.swing.JFrame {
         jButtonLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jLabelLogin.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabelLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelLogin.setText("Login");
 
+        jLabelPassword.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabelPassword.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelPassword.setText("Password");
 
+        jLabelName.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabelName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelName.setText("Name");
 
+        jtfName.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        jtfName.setForeground(new java.awt.Color(153, 153, 153));
         jtfName.setToolTipText("");
+        jtfName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jtfName.setOpaque(false);
+
+        jpfPassword.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        jpfPassword.setForeground(new java.awt.Color(153, 153, 153));
+        jpfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jpfPassword.setOpaque(false);
 
         jCheckBoxPassword.setText("Show Password");
         jCheckBoxPassword.addActionListener(new java.awt.event.ActionListener() {
