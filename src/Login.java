@@ -4,17 +4,14 @@ import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
-    private String name;
-    private String password;
-    
     public Login() {
         this.setTitle("Clinic Recording System");
         initComponents();
         setLocationRelativeTo(null);
-        jtfName.grabFocus();
+        jtfUsername.grabFocus();
         
         //set the background to transparent
-        jtfName.setBackground(new java.awt.Color(0, 0, 0, 1));
+        jtfUsername.setBackground(new java.awt.Color(0, 0, 0, 1));
         jpfPassword.setBackground(new java.awt.Color(0, 0, 0, 1));
     }
 
@@ -24,8 +21,8 @@ public class Login extends javax.swing.JFrame {
 
         jLabelLogin = new javax.swing.JLabel();
         jLabelPassword = new javax.swing.JLabel();
-        jLabelName = new javax.swing.JLabel();
-        jtfName = new javax.swing.JTextField();
+        jLabelUsername = new javax.swing.JLabel();
+        jtfUsername = new javax.swing.JTextField();
         jpfPassword = new javax.swing.JPasswordField();
         jCheckBoxPassword = new javax.swing.JCheckBox();
         jButtonLogin = new javax.swing.JButton();
@@ -33,29 +30,40 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabelLogin.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabelLogin.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
         jLabelLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelLogin.setText("Login");
 
-        jLabelPassword.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabelPassword.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
         jLabelPassword.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelPassword.setText("Password");
 
-        jLabelName.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabelName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelName.setText("Name");
+        jLabelUsername.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        jLabelUsername.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelUsername.setText("Username");
 
-        jtfName.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
-        jtfName.setForeground(new java.awt.Color(153, 153, 153));
-        jtfName.setToolTipText("");
-        jtfName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jtfName.setOpaque(false);
+        jtfUsername.setFont(new java.awt.Font(".Heiti J", 0, 16)); // NOI18N
+        jtfUsername.setForeground(new java.awt.Color(51, 51, 51));
+        jtfUsername.setToolTipText("");
+        jtfUsername.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jtfUsername.setOpaque(false);
+        jtfUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfUsernameActionPerformed(evt);
+            }
+        });
 
-        jpfPassword.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
-        jpfPassword.setForeground(new java.awt.Color(153, 153, 153));
+        jpfPassword.setFont(new java.awt.Font(".Heiti J", 0, 16)); // NOI18N
+        jpfPassword.setForeground(new java.awt.Color(51, 51, 51));
         jpfPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         jpfPassword.setOpaque(false);
+        jpfPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jpfPasswordActionPerformed(evt);
+            }
+        });
 
+        jCheckBoxPassword.setFont(new java.awt.Font(".Heiti J", 1, 12)); // NOI18N
         jCheckBoxPassword.setText("Show Password");
         jCheckBoxPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,7 +71,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        jButtonLogin.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jButtonLogin.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
         jButtonLogin.setText("Login");
         jButtonLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,23 +85,28 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabelLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButtonLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabelName, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabelPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
+                            .addGap(163, 163, 163)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jpfPassword)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jCheckBoxPassword)
-                                    .addGap(0, 0, Short.MAX_VALUE))))))
-                .addContainerGap(75, Short.MAX_VALUE))
+                                    .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButtonLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabelPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(250, 250, 250)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jLabelUsername)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,8 +114,8 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabelLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -111,7 +124,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jCheckBoxPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonLogin)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
@@ -127,15 +140,13 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBoxPasswordActionPerformed
 
-    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
-        // TODO add your handling code here:
-        //Get Name & Password
-        if((jtfName.getText()).isEmpty() && (jpfPassword.getPassword()).length == 0){
+    private void checkUsernamePassowrd(){
+        if((jtfUsername.getText()).isEmpty() && (jpfPassword.getPassword()).length == 0){
             
             JOptionPane.showMessageDialog(null, "Please Enter Name & Password !!!", "Error Name & Password", JOptionPane.ERROR_MESSAGE);
             
         }
-        else if((jtfName.getText()).isEmpty()){
+        else if((jtfUsername.getText()).isEmpty()){
             
             JOptionPane.showMessageDialog(null, "Please Enter Name !!!", "Error Name", JOptionPane.ERROR_MESSAGE);
             
@@ -146,13 +157,27 @@ public class Login extends javax.swing.JFrame {
             
         }
         else{
-            
-            name = jtfName.getText();
-            password = jpfPassword.getText();
-        
+           
+            Home home = new Home(jtfUsername.getText());
+            home.setVisible(true);
+            this.dispose();   
         }
-        
+    }
+    
+    private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
+        // TODO add your handling code here:
+        checkUsernamePassowrd();
     }//GEN-LAST:event_jButtonLoginActionPerformed
+
+    private void jpfPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpfPasswordActionPerformed
+        // TODO add your handling code here:
+        checkUsernamePassowrd();
+    }//GEN-LAST:event_jpfPasswordActionPerformed
+
+    private void jtfUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfUsernameActionPerformed
+        // TODO add your handling code here:
+        jpfPassword.grabFocus();
+    }//GEN-LAST:event_jtfUsernameActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -190,9 +215,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton jButtonLogin;
     private javax.swing.JCheckBox jCheckBoxPassword;
     private javax.swing.JLabel jLabelLogin;
-    private javax.swing.JLabel jLabelName;
     private javax.swing.JLabel jLabelPassword;
+    private javax.swing.JLabel jLabelUsername;
     private javax.swing.JPasswordField jpfPassword;
-    private javax.swing.JTextField jtfName;
+    private javax.swing.JTextField jtfUsername;
     // End of variables declaration//GEN-END:variables
 }

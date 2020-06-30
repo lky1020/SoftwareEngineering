@@ -7,8 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.swing.Timer;
 import javax.swing.JPanel;
@@ -30,13 +28,13 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form Home
      */
-    public Home() {
+    public Home(String username) {
         initComponents();
         setLocationRelativeTo(null);
         patientHoverPanel.setBackground( new Color(2, 165, 249));
         patientBar.setBackground( new Color(63, 218, 234));
         
-        
+        greetLabel.setText(greetLabel.getText() + username);
         
         Date d = new Date();
         SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
@@ -210,7 +208,7 @@ public class Home extends javax.swing.JFrame {
 
         greetLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
         greetLabel.setForeground(new java.awt.Color(51, 51, 51));
-        greetLabel.setText("Welcome lky1020");
+        greetLabel.setText("Welcome, ");
 
         dateLabel.setFont(new java.awt.Font(".Heiti J", 1, 14)); // NOI18N
         dateLabel.setForeground(new java.awt.Color(51, 51, 51));
@@ -625,9 +623,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(topPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(methodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(methodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -742,7 +738,7 @@ public class Home extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Home().setVisible(true);
+                
             }
         });
     }
