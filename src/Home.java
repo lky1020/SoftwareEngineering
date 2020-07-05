@@ -87,6 +87,14 @@ public class Home extends javax.swing.JFrame {
                 medicineModule.setVisible(false);
                 staffModule.setVisible(true);
             }
+            
+            if(e.getSource() == comingSoonBar){
+                patientsModule.setVisible(false);
+                appointmentsModule.setVisible(false);
+                medicineModule.setVisible(false);
+                staffModule.setVisible(false);
+                comingSoonModule.setVisible(true);
+            }
         }
 
         @Override
@@ -153,6 +161,10 @@ public class Home extends javax.swing.JFrame {
         staffLogo = new javax.swing.JLabel();
         staffLabel = new javax.swing.JLabel();
         staffHoverPanel = new javax.swing.JPanel();
+        comingSoonBar = new javax.swing.JPanel();
+        comingSoonLogo = new javax.swing.JLabel();
+        comingSoonLabel = new javax.swing.JLabel();
+        comingSoonHoverPanel = new javax.swing.JPanel();
         methodPanel = new javax.swing.JPanel();
         patientsModule = new javax.swing.JPanel();
         patientsModuleLabel = new javax.swing.JLabel();
@@ -162,6 +174,9 @@ public class Home extends javax.swing.JFrame {
         medicineModuleLabel = new javax.swing.JLabel();
         staffModule = new javax.swing.JPanel();
         staffModuleLabel = new javax.swing.JLabel();
+        comingSoonModule = new javax.swing.JPanel();
+        comingSoonModuleLogo = new javax.swing.JLabel();
+        comingSoonModuleLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -469,7 +484,64 @@ public class Home extends javax.swing.JFrame {
             staffBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(staffLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
             .addComponent(staffLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(staffHoverPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(staffBarLayout.createSequentialGroup()
+                .addComponent(staffHoverPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        comingSoonBar.setBackground(new java.awt.Color(255, 255, 255));
+        comingSoonBar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        comingSoonBar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comingSoonBarMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                comingSoonBarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                comingSoonBarMouseExited(evt);
+            }
+        });
+
+        comingSoonLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        comingSoonLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/comingSoon.png"))); // NOI18N
+
+        comingSoonLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        comingSoonLabel.setForeground(new java.awt.Color(0, 0, 0));
+        comingSoonLabel.setText("Coming Soon");
+
+        comingSoonHoverPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout comingSoonHoverPanelLayout = new javax.swing.GroupLayout(comingSoonHoverPanel);
+        comingSoonHoverPanel.setLayout(comingSoonHoverPanelLayout);
+        comingSoonHoverPanelLayout.setHorizontalGroup(
+            comingSoonHoverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
+        comingSoonHoverPanelLayout.setVerticalGroup(
+            comingSoonHoverPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout comingSoonBarLayout = new javax.swing.GroupLayout(comingSoonBar);
+        comingSoonBar.setLayout(comingSoonBarLayout);
+        comingSoonBarLayout.setHorizontalGroup(
+            comingSoonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(comingSoonBarLayout.createSequentialGroup()
+                .addComponent(comingSoonHoverPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(comingSoonLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(comingSoonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+        comingSoonBarLayout.setVerticalGroup(
+            comingSoonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(comingSoonLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(comingSoonLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(comingSoonBarLayout.createSequentialGroup()
+                .addComponent(comingSoonHoverPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
@@ -480,6 +552,9 @@ public class Home extends javax.swing.JFrame {
             .addComponent(appointmentsBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(medicineBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(staffBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidePanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(comingSoonBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -492,6 +567,8 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(medicineBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(staffBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(comingSoonBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -512,7 +589,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(patientsModuleLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(patientsModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(525, Short.MAX_VALUE))
+                .addContainerGap(517, Short.MAX_VALUE))
         );
         patientsModuleLayout.setVerticalGroup(
             patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -538,7 +615,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(appointmentsModuleLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(appointmentsModuleLabel)
-                .addContainerGap(476, Short.MAX_VALUE))
+                .addContainerGap(468, Short.MAX_VALUE))
         );
         appointmentsModuleLayout.setVerticalGroup(
             appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -564,7 +641,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(medicineModuleLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(medicineModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(525, Short.MAX_VALUE))
+                .addContainerGap(517, Short.MAX_VALUE))
         );
         medicineModuleLayout.setVerticalGroup(
             medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -590,7 +667,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(staffModuleLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(staffModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(525, Short.MAX_VALUE))
+                .addContainerGap(517, Short.MAX_VALUE))
         );
         staffModuleLayout.setVerticalGroup(
             staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -601,6 +678,36 @@ public class Home extends javax.swing.JFrame {
         );
 
         methodPanel.add(staffModule, "card5");
+
+        comingSoonModule.setBackground(new java.awt.Color(204, 204, 204));
+
+        comingSoonModuleLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        comingSoonModuleLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/coming.png"))); // NOI18N
+
+        comingSoonModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 48)); // NOI18N
+        comingSoonModuleLabel.setForeground(new java.awt.Color(0, 0, 0));
+        comingSoonModuleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        comingSoonModuleLabel.setText("In Progress...");
+        comingSoonModuleLabel.setToolTipText("");
+
+        javax.swing.GroupLayout comingSoonModuleLayout = new javax.swing.GroupLayout(comingSoonModule);
+        comingSoonModule.setLayout(comingSoonModuleLayout);
+        comingSoonModuleLayout.setHorizontalGroup(
+            comingSoonModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(comingSoonModuleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+        );
+        comingSoonModuleLayout.setVerticalGroup(
+            comingSoonModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(comingSoonModuleLayout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(comingSoonModuleLabel)
+                .addContainerGap(107, Short.MAX_VALUE))
+        );
+
+        methodPanel.add(comingSoonModule, "card5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -708,6 +815,21 @@ public class Home extends javax.swing.JFrame {
         sideBarListener.mouseClicked(evt);
     }//GEN-LAST:event_staffBarMouseClicked
 
+    private void comingSoonBarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comingSoonBarMouseEntered
+        // TODO add your handling code here:
+        sideBarListener.mouseEntered(evt);
+    }//GEN-LAST:event_comingSoonBarMouseEntered
+
+    private void comingSoonBarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comingSoonBarMouseExited
+        // TODO add your handling code here:
+        sideBarListener.mouseExited(evt);
+    }//GEN-LAST:event_comingSoonBarMouseExited
+
+    private void comingSoonBarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comingSoonBarMouseClicked
+        // TODO add your handling code here:
+        sideBarListener.mouseClicked(evt);
+    }//GEN-LAST:event_comingSoonBarMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -752,13 +874,24 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel appointmentsModuleLabel;
     private javax.swing.JLabel clinicLogo;
     private javax.swing.JLabel closeLabel;
+    private javax.swing.JPanel comingSoonBar;
+    private javax.swing.JPanel comingSoonHoverPanel;
+    private javax.swing.JLabel comingSoonLabel;
+    private javax.swing.JLabel comingSoonLogo;
+    private javax.swing.JPanel comingSoonModule;
+    private javax.swing.JLabel comingSoonModuleLabel;
+    private javax.swing.JLabel comingSoonModuleLogo;
     private javax.swing.JLabel dateLabel;
     private javax.swing.JLabel greetLabel;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPanel medicineBar;
+    private javax.swing.JPanel medicineBar1;
     private javax.swing.JPanel medicineHoverPanel;
+    private javax.swing.JPanel medicineHoverPanel1;
     private javax.swing.JLabel medicineLabel;
+    private javax.swing.JLabel medicineLabel1;
     private javax.swing.JLabel medicineLogo;
+    private javax.swing.JLabel medicineLogo1;
     private javax.swing.JPanel medicineModule;
     private javax.swing.JLabel medicineModuleLabel;
     private javax.swing.JPanel methodPanel;
@@ -770,9 +903,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel patientsModuleLabel;
     private javax.swing.JPanel sidePanel;
     private javax.swing.JPanel staffBar;
+    private javax.swing.JPanel staffBar1;
     private javax.swing.JPanel staffHoverPanel;
+    private javax.swing.JPanel staffHoverPanel1;
     private javax.swing.JLabel staffLabel;
+    private javax.swing.JLabel staffLabel1;
     private javax.swing.JLabel staffLogo;
+    private javax.swing.JLabel staffLogo1;
     private javax.swing.JPanel staffModule;
     private javax.swing.JLabel staffModuleLabel;
     private javax.swing.JLabel timeLabel;

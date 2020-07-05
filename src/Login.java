@@ -1,9 +1,10 @@
-
-
+import java.util.*;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
+    private int invalidUser = 0;
+    
     public Login() {
         this.setTitle("Clinic Recording System");
         initComponents();
@@ -144,23 +145,43 @@ public class Login extends javax.swing.JFrame {
         if((jtfUsername.getText()).isEmpty() && (jpfPassword.getPassword()).length == 0){
             
             JOptionPane.showMessageDialog(null, "Please Enter Name & Password !!!", "Error Name & Password", JOptionPane.ERROR_MESSAGE);
+            invalidUser++;
             
         }
         else if((jtfUsername.getText()).isEmpty()){
             
             JOptionPane.showMessageDialog(null, "Please Enter Name !!!", "Error Name", JOptionPane.ERROR_MESSAGE);
+            invalidUser++;
             
         }
         else if((jpfPassword.getPassword()).length == 0){
             
             JOptionPane.showMessageDialog(null, "Please Enter Password !!!", "Error Password", JOptionPane.ERROR_MESSAGE);
+            invalidUser++;
             
         }
         else{
-           
-            Home home = new Home(jtfUsername.getText());
-            home.setVisible(true);
-            this.dispose();   
+
+            if(jtfUsername.getText().equals("lky1020") && Arrays.equals(jpfPassword.getPassword(), new char[]{'1', '0', '2', '0'})){
+                
+                invalidUser = 0;
+                
+                Home home = new Home(jtfUsername.getText());
+                home.setVisible(true);
+                this.dispose();
+                
+            }
+            else if(invalidUser >= 3){
+                
+                JOptionPane.showMessageDialog(null, "Access Denied !!! Please contact Owner", "Acces Denied", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else{
+                
+                Home home = new Home(jtfUsername.getText());
+                home.setVisible(true);
+                this.dispose();
+            }
         }
     }
     
