@@ -1,4 +1,5 @@
 
+import Class.Patient;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -7,9 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,6 +27,9 @@ import javax.swing.JPanel;
 public class Home extends javax.swing.JFrame {
 
     private SideBarListener sideBarListener = new SideBarListener();
+    private DefaultTableModel patientModel;
+    private List<Patient> patientList = new ArrayList<>();
+    private Patient patient;
     
     /**
      * Creates new form Home
@@ -40,7 +46,30 @@ public class Home extends javax.swing.JFrame {
         SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
         dateLabel.setText(dateLabel.getText() + s.format(d));
         
+        
+        //set the background to transparent
+        patientsModuleICNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        patientsModuleICTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        patientsModuleNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        patientsModuleMobileNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        
         showTime();
+        
+        
+        //hardcode Patient Records
+        patient = new Patient(1020, "001020-14-1020", "Lim Kah Yee", "012-6348561", "26-09-2012");
+        patientList.add(patient);
+        patient = new Patient(3468, "011120-14-3468", "Wong Hui Ping", "017-3468520", "20-11-2010");
+        patientList.add(patient);
+        patient = new Patient(5913, "940614-11-5913", "Tan Yan Kai", "012-3795013", "14-06-2018");
+        patientList.add(patient);
+        patient = new Patient(4358, "861028-01-4358", "Loo Khai Sheng", "016-3468215", "25-12-2019");
+        patientList.add(patient);
+        
+        //show Patient Records
+        patientModel = (DefaultTableModel)patientsModuleTable.getModel();
+        setModelRow();
+
     }
 
     public void showTime(){
@@ -53,6 +82,17 @@ public class Home extends javax.swing.JFrame {
             }
             
         }).start();
+    }
+    
+    private void setModelRow(){
+
+        patientModel.setRowCount(0);
+        
+        for(int i = 0; i < patientList.size(); i++){
+            
+             patientModel.addRow(new Object[]{patientList.get(i).getNo(), patientList.get(i).getIcNo(), patientList.get(i).getIc(), patientList.get(i).getName(), patientList.get(i).getMobileNo(), patientList.get(i).getDateCreated()});
+        
+        }   
     }
     
     static int xx, yy; 
@@ -167,7 +207,22 @@ public class Home extends javax.swing.JFrame {
         comingSoonHoverPanel = new javax.swing.JPanel();
         methodPanel = new javax.swing.JPanel();
         patientsModule = new javax.swing.JPanel();
-        patientsModuleLabel = new javax.swing.JLabel();
+        patientsModuleScrollPane = new javax.swing.JScrollPane();
+        patientsModuleTable = new javax.swing.JTable();
+        patientsModuleICNoLabel = new javax.swing.JLabel();
+        patientsModuleICNoTextField = new javax.swing.JTextField();
+        patientsModuleNameLabel = new javax.swing.JLabel();
+        patientsModuleNameTextField = new javax.swing.JTextField();
+        patientsModuleICLabel = new javax.swing.JLabel();
+        patientsModuleICTextField = new javax.swing.JTextField();
+        patientsModuleMobileNoLabel = new javax.swing.JLabel();
+        patientsModuleMobileNoTextField = new javax.swing.JTextField();
+        patientsModuleDateCreatedLabel1 = new javax.swing.JLabel();
+        patientsModuleDateCreatedDateChooser = new com.toedter.calendar.JDateChooser();
+        patientsModuleAddButton = new javax.swing.JButton();
+        patientsModuleModifyButton = new javax.swing.JButton();
+        patientsModuleSearchButton1 = new javax.swing.JButton();
+        patientsModuleDeleteButton2 = new javax.swing.JButton();
         appointmentsModule = new javax.swing.JPanel();
         appointmentsModuleLabel = new javax.swing.JLabel();
         medicineModule = new javax.swing.JPanel();
@@ -552,9 +607,7 @@ public class Home extends javax.swing.JFrame {
             .addComponent(appointmentsBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(medicineBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(staffBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidePanelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(comingSoonBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(comingSoonBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         sidePanelLayout.setVerticalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -575,28 +628,162 @@ public class Home extends javax.swing.JFrame {
         methodPanel.setBackground(new java.awt.Color(240, 240, 240));
         methodPanel.setLayout(new java.awt.CardLayout());
 
-        patientsModule.setBackground(new java.awt.Color(102, 102, 255));
+        patientsModule.setBackground(new java.awt.Color(204, 204, 204));
 
-        patientsModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
-        patientsModuleLabel.setForeground(new java.awt.Color(51, 51, 51));
-        patientsModuleLabel.setText("Patients Module");
-        patientsModuleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 1, 0));
+        patientsModuleScrollPane.setBackground(new java.awt.Color(255, 255, 51));
+
+        patientsModuleTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No", "IC No", "IC", "Name", "Mobile No", "Date Created"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        patientsModuleTable.setColumnSelectionAllowed(true);
+        patientsModuleTable.getTableHeader().setReorderingAllowed(false);
+        patientsModuleScrollPane.setViewportView(patientsModuleTable);
+        patientsModuleTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (patientsModuleTable.getColumnModel().getColumnCount() > 0) {
+            patientsModuleTable.getColumnModel().getColumn(0).setMinWidth(25);
+            patientsModuleTable.getColumnModel().getColumn(0).setMaxWidth(45);
+            patientsModuleTable.getColumnModel().getColumn(1).setMinWidth(40);
+            patientsModuleTable.getColumnModel().getColumn(1).setMaxWidth(60);
+            patientsModuleTable.getColumnModel().getColumn(2).setResizable(false);
+            patientsModuleTable.getColumnModel().getColumn(3).setResizable(false);
+            patientsModuleTable.getColumnModel().getColumn(4).setResizable(false);
+            patientsModuleTable.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        patientsModuleICNoLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleICNoLabel.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleICNoLabel.setText("IC No :");
+
+        patientsModuleICNoTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        patientsModuleICNoTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        patientsModuleNameLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleNameLabel.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleNameLabel.setText("Name :");
+
+        patientsModuleNameTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        patientsModuleNameTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        patientsModuleICLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleICLabel.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleICLabel.setText("IC :");
+
+        patientsModuleICTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        patientsModuleICTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        patientsModuleMobileNoLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleMobileNoLabel.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleMobileNoLabel.setText("Mobile No : ");
+
+        patientsModuleMobileNoTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        patientsModuleMobileNoTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        patientsModuleDateCreatedLabel1.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleDateCreatedLabel1.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleDateCreatedLabel1.setText("Date Created ; ");
+
+        patientsModuleDateCreatedDateChooser.setDateFormatString("dd-MM-yyyy");
+        patientsModuleDateCreatedDateChooser.setDoubleBuffered(false);
+        patientsModuleDateCreatedDateChooser.setMaxSelectableDate(new java.util.Date(253370739701000L));
+        patientsModuleDateCreatedDateChooser.setMinSelectableDate(new java.util.Date(946659701000L));
+        patientsModuleDateCreatedDateChooser.setOpaque(false);
+
+        patientsModuleAddButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleAddButton.setText("Add");
+        patientsModuleAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                patientsModuleAddButtonActionPerformed(evt);
+            }
+        });
+
+        patientsModuleModifyButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleModifyButton.setText("Modify");
+
+        patientsModuleSearchButton1.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleSearchButton1.setText("Search");
+
+        patientsModuleDeleteButton2.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleDeleteButton2.setText("Delete");
 
         javax.swing.GroupLayout patientsModuleLayout = new javax.swing.GroupLayout(patientsModule);
         patientsModule.setLayout(patientsModuleLayout);
         patientsModuleLayout.setHorizontalGroup(
             patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(patientsModuleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
             .addGroup(patientsModuleLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(patientsModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(517, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(patientsModuleLayout.createSequentialGroup()
+                        .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(patientsModuleLayout.createSequentialGroup()
+                                .addComponent(patientsModuleMobileNoLabel)
+                                .addGap(0, 0, 0)
+                                .addComponent(patientsModuleMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(patientsModuleDateCreatedLabel1)
+                                .addGap(0, 0, 0)
+                                .addComponent(patientsModuleDateCreatedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(patientsModuleLayout.createSequentialGroup()
+                                .addComponent(patientsModuleICNoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(patientsModuleICNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(patientsModuleICLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(patientsModuleICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(patientsModuleLayout.createSequentialGroup()
+                        .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(88, 88, 88)
+                        .addComponent(patientsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(patientsModuleSearchButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(103, 103, 103)
+                        .addComponent(patientsModuleDeleteButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32))))
         );
         patientsModuleLayout.setVerticalGroup(
             patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(patientsModuleLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(patientsModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(patientsModuleICLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(patientsModuleICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleICNoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(patientsModuleICNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(patientsModuleMobileNoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleDateCreatedLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleDateCreatedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleSearchButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleDeleteButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(patientsModuleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
         );
 
         methodPanel.add(patientsModule, "card2");
@@ -830,6 +1017,26 @@ public class Home extends javax.swing.JFrame {
         sideBarListener.mouseClicked(evt);
     }//GEN-LAST:event_comingSoonBarMouseClicked
 
+    private void patientsModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleAddButtonActionPerformed
+        // TODO add your handling code here:
+        
+        SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
+        
+        if(patientsModuleICNoTextField.getText().equals("") || patientsModuleICTextField.getText().equals("") || 
+                patientsModuleNameTextField.getText().equals("") || patientsModuleMobileNoTextField.getText().equals("") ||
+                patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter All The Input Field !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            
+        }else{
+            patient = new Patient(Integer.parseInt(patientsModuleICNoTextField.getText()), patientsModuleICTextField.getText(), patientsModuleNameTextField.getText(), patientsModuleMobileNoTextField.getText(), s.format(patientsModuleDateCreatedDateChooser.getDate()));
+            patientList.add(patient);
+            setModelRow();
+        }
+        
+
+    }//GEN-LAST:event_patientsModuleAddButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -860,7 +1067,7 @@ public class Home extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+                new Home("lky1020").setVisible(true);
             }
         });
     }
@@ -885,13 +1092,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel greetLabel;
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPanel medicineBar;
-    private javax.swing.JPanel medicineBar1;
     private javax.swing.JPanel medicineHoverPanel;
-    private javax.swing.JPanel medicineHoverPanel1;
     private javax.swing.JLabel medicineLabel;
-    private javax.swing.JLabel medicineLabel1;
     private javax.swing.JLabel medicineLogo;
-    private javax.swing.JLabel medicineLogo1;
     private javax.swing.JPanel medicineModule;
     private javax.swing.JLabel medicineModuleLabel;
     private javax.swing.JPanel methodPanel;
@@ -900,16 +1103,27 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel patientLabel;
     private javax.swing.JLabel patientLogo;
     private javax.swing.JPanel patientsModule;
-    private javax.swing.JLabel patientsModuleLabel;
+    private javax.swing.JButton patientsModuleAddButton;
+    private com.toedter.calendar.JDateChooser patientsModuleDateCreatedDateChooser;
+    private javax.swing.JLabel patientsModuleDateCreatedLabel1;
+    private javax.swing.JButton patientsModuleDeleteButton2;
+    private javax.swing.JLabel patientsModuleICLabel;
+    private javax.swing.JLabel patientsModuleICNoLabel;
+    private javax.swing.JTextField patientsModuleICNoTextField;
+    private javax.swing.JTextField patientsModuleICTextField;
+    private javax.swing.JLabel patientsModuleMobileNoLabel;
+    private javax.swing.JTextField patientsModuleMobileNoTextField;
+    private javax.swing.JButton patientsModuleModifyButton;
+    private javax.swing.JLabel patientsModuleNameLabel;
+    private javax.swing.JTextField patientsModuleNameTextField;
+    private javax.swing.JScrollPane patientsModuleScrollPane;
+    private javax.swing.JButton patientsModuleSearchButton1;
+    private javax.swing.JTable patientsModuleTable;
     private javax.swing.JPanel sidePanel;
     private javax.swing.JPanel staffBar;
-    private javax.swing.JPanel staffBar1;
     private javax.swing.JPanel staffHoverPanel;
-    private javax.swing.JPanel staffHoverPanel1;
     private javax.swing.JLabel staffLabel;
-    private javax.swing.JLabel staffLabel1;
     private javax.swing.JLabel staffLogo;
-    private javax.swing.JLabel staffLogo1;
     private javax.swing.JPanel staffModule;
     private javax.swing.JLabel staffModuleLabel;
     private javax.swing.JLabel timeLabel;
