@@ -7,29 +7,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author User
- */
 public class Home extends javax.swing.JFrame {
 
     private SideBarListener sideBarListener = new SideBarListener();
     private DefaultTableModel patientModel;
     private List<Patient> patientList = new ArrayList<>();
+    private List<Patient> patientSearchList = new ArrayList<>();
     private Patient patient;
+    private String patientName; //for medical description label
     
     /**
      * Creates new form Home
@@ -55,20 +50,26 @@ public class Home extends javax.swing.JFrame {
         
         showTime();
         
-        
+        patientsModuleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        patientName = patientsModuleMedicalDescriptionLabel.getText();
         //hardcode Patient Records
-        patient = new Patient(1020, "001020-14-1020", "Lim Kah Yee", "012-6348561", "26-09-2012");
+        /*patient = new Patient(1020, "001020-14-1020", "Lim Kah Yee", "012-6348561", "26-09-2012", "26-09-2012\nCough, Fewer\n");
         patientList.add(patient);
-        patient = new Patient(3468, "011120-14-3468", "Wong Hui Ping", "017-3468520", "20-11-2010");
+        patient = new Patient(3468, "011120-14-3468", "Wong Hui Ping", "017-3468520", "20-11-2010", "20-11-2010\nCough, Fewer\n");
         patientList.add(patient);
-        patient = new Patient(5913, "940614-11-5913", "Tan Yan Kai", "012-3795013", "14-06-2018");
+        patient = new Patient(5913, "940614-11-5913", "Tan Yan Kai", "012-3795013", "14-06-2018", "14-06-2018\nCough, Fewer\n");
         patientList.add(patient);
-        patient = new Patient(4358, "861028-01-4358", "Loo Khai Sheng", "016-3468215", "25-12-2019");
+        patient = new Patient(4358, "861028-01-4358", "Loo Khai Sheng", "016-3468215", "25-12-2019", "25-12-2019\nCough, Fewer\n");
+        patientList.add(patient);
+        patient = new Patient(9245, "761023-14-9245", "Lee Wei Chian", "017-2803462", "07-07-2018", "07-07-2018\nCough, Fewer\n");
         patientList.add(patient);
         
-        //show Patient Records
+        savePatientsDataToFile();*/
+
+        //read and show Patient Records
+        readPatientsDataFromFile();
         patientModel = (DefaultTableModel)patientsModuleTable.getModel();
-        setModelRow();
+        setModelRow(patientList);
 
     }
 
@@ -84,15 +85,58 @@ public class Home extends javax.swing.JFrame {
         }).start();
     }
     
-    private void setModelRow(){
+    private void setModelRow(List<Patient> arrayList){
 
         patientModel.setRowCount(0);
         
-        for(int i = 0; i < patientList.size(); i++){
+        for(int i = 0; i < arrayList.size(); i++){
             
-             patientModel.addRow(new Object[]{patientList.get(i).getNo(), patientList.get(i).getIcNo(), patientList.get(i).getIc(), patientList.get(i).getName(), patientList.get(i).getMobileNo(), patientList.get(i).getDateCreated()});
+             patientModel.addRow(new Object[]{i + 1, arrayList.get(i).getIcNo(), arrayList.get(i).getIc(), arrayList.get(i).getName(), arrayList.get(i).getMobileNo(), arrayList.get(i).getDateCreated()});
         
         }   
+    }
+    
+    private void savePatientsDataToFile(){
+        try {
+            
+            File file = new File("patients.dat");
+            System.out.println("***TRACE SAVE: " + file.getAbsolutePath());
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
+            ooStream.writeObject(patientList);
+            ooStream.close();
+            
+          } catch (FileNotFoundException ex) {
+              
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          } catch (IOException ex) {
+              
+            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          }
+    }
+    
+    private void readPatientsDataFromFile(){
+        try {
+            File file = new File("patients.dat");
+            System.out.println("***TRACE READ: " + file.getAbsolutePath());
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(file));
+            patientList = (ArrayList) (oiStream.readObject());
+            oiStream.close();
+
+        } catch (FileNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (IOException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Cannot read from file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (ClassNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Class not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        }
     }
     
     static int xx, yy; 
@@ -217,12 +261,16 @@ public class Home extends javax.swing.JFrame {
         patientsModuleICTextField = new javax.swing.JTextField();
         patientsModuleMobileNoLabel = new javax.swing.JLabel();
         patientsModuleMobileNoTextField = new javax.swing.JTextField();
-        patientsModuleDateCreatedLabel1 = new javax.swing.JLabel();
+        patientsModuleDateCreatedLabel = new javax.swing.JLabel();
         patientsModuleDateCreatedDateChooser = new com.toedter.calendar.JDateChooser();
         patientsModuleAddButton = new javax.swing.JButton();
         patientsModuleModifyButton = new javax.swing.JButton();
-        patientsModuleSearchButton1 = new javax.swing.JButton();
-        patientsModuleDeleteButton2 = new javax.swing.JButton();
+        patientsModuleSearchButton = new javax.swing.JButton();
+        patientsModuleDeleteButton = new javax.swing.JButton();
+        patientsModuleMedicalDescriptionLabel = new javax.swing.JLabel();
+        patientsModuleMedicalDescriptionScrollPane = new javax.swing.JScrollPane();
+        patientsModuleMedicalDescriptionTextArea = new javax.swing.JTextArea();
+        patientsModuleSubmitButton = new javax.swing.JButton();
         appointmentsModule = new javax.swing.JPanel();
         appointmentsModuleLabel = new javax.swing.JLabel();
         medicineModule = new javax.swing.JPanel();
@@ -641,7 +689,7 @@ public class Home extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -650,6 +698,11 @@ public class Home extends javax.swing.JFrame {
         });
         patientsModuleTable.setColumnSelectionAllowed(true);
         patientsModuleTable.getTableHeader().setReorderingAllowed(false);
+        patientsModuleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                patientsModuleTableMouseClicked(evt);
+            }
+        });
         patientsModuleScrollPane.setViewportView(patientsModuleTable);
         patientsModuleTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (patientsModuleTable.getColumnModel().getColumnCount() > 0) {
@@ -691,9 +744,9 @@ public class Home extends javax.swing.JFrame {
         patientsModuleMobileNoTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
         patientsModuleMobileNoTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        patientsModuleDateCreatedLabel1.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
-        patientsModuleDateCreatedLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        patientsModuleDateCreatedLabel1.setText("Date Created ; ");
+        patientsModuleDateCreatedLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleDateCreatedLabel.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleDateCreatedLabel.setText("Date Created ; ");
 
         patientsModuleDateCreatedDateChooser.setDateFormatString("dd-MM-yyyy");
         patientsModuleDateCreatedDateChooser.setDoubleBuffered(false);
@@ -712,17 +765,39 @@ public class Home extends javax.swing.JFrame {
         patientsModuleModifyButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
         patientsModuleModifyButton.setText("Modify");
 
-        patientsModuleSearchButton1.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
-        patientsModuleSearchButton1.setText("Search");
+        patientsModuleSearchButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleSearchButton.setText("Search");
+        patientsModuleSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                patientsModuleSearchButtonActionPerformed(evt);
+            }
+        });
 
-        patientsModuleDeleteButton2.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
-        patientsModuleDeleteButton2.setText("Delete");
+        patientsModuleDeleteButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleDeleteButton.setText("Delete");
+        patientsModuleDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                patientsModuleDeleteButtonActionPerformed(evt);
+            }
+        });
+
+        patientsModuleMedicalDescriptionLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        patientsModuleMedicalDescriptionLabel.setForeground(new java.awt.Color(51, 51, 51));
+        patientsModuleMedicalDescriptionLabel.setText("Medical Description of ");
+        patientsModuleMedicalDescriptionLabel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        patientsModuleMedicalDescriptionTextArea.setEditable(false);
+        patientsModuleMedicalDescriptionTextArea.setColumns(20);
+        patientsModuleMedicalDescriptionTextArea.setRows(5);
+        patientsModuleMedicalDescriptionScrollPane.setViewportView(patientsModuleMedicalDescriptionTextArea);
+
+        patientsModuleSubmitButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleSubmitButton.setText("Submit");
 
         javax.swing.GroupLayout patientsModuleLayout = new javax.swing.GroupLayout(patientsModule);
         patientsModule.setLayout(patientsModuleLayout);
         patientsModuleLayout.setHorizontalGroup(
             patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(patientsModuleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
             .addGroup(patientsModuleLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -733,7 +808,7 @@ public class Home extends javax.swing.JFrame {
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)
-                                .addComponent(patientsModuleDateCreatedLabel1)
+                                .addComponent(patientsModuleDateCreatedLabel)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleDateCreatedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(patientsModuleLayout.createSequentialGroup()
@@ -748,16 +823,29 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(69, Short.MAX_VALUE))
                     .addGroup(patientsModuleLayout.createSequentialGroup()
                         .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(88, 88, 88)
+                        .addGap(85, 85, 85)
                         .addComponent(patientsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(patientsModuleSearchButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(103, 103, 103)
-                        .addComponent(patientsModuleDeleteButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))))
+                        .addComponent(patientsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100)
+                        .addComponent(patientsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34))))
+            .addGroup(patientsModuleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(patientsModuleScrollPane)
+                    .addComponent(patientsModuleMedicalDescriptionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, patientsModuleLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(patientsModuleSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(patientsModuleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(patientsModuleMedicalDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         patientsModuleLayout.setVerticalGroup(
             patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -774,16 +862,22 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(patientsModuleMobileNoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(patientsModuleMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(patientsModuleDateCreatedLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleDateCreatedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(patientsModuleDateCreatedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                .addGap(8, 8, 8)
                 .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(patientsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(patientsModuleSearchButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(patientsModuleDeleteButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(patientsModuleScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
+                    .addComponent(patientsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(patientsModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(patientsModuleMedicalDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(patientsModuleMedicalDescriptionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(patientsModuleSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         methodPanel.add(patientsModule, "card2");
@@ -809,7 +903,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(appointmentsModuleLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(appointmentsModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addContainerGap(458, Short.MAX_VALUE))
         );
 
         methodPanel.add(appointmentsModule, "card3");
@@ -835,7 +929,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(medicineModuleLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(medicineModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addContainerGap(458, Short.MAX_VALUE))
         );
 
         methodPanel.add(medicineModule, "card4");
@@ -861,7 +955,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(staffModuleLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(staffModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addContainerGap(458, Short.MAX_VALUE))
         );
 
         methodPanel.add(staffModule, "card5");
@@ -891,7 +985,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(comingSoonModuleLabel)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         methodPanel.add(comingSoonModule, "card5");
@@ -1017,6 +1111,7 @@ public class Home extends javax.swing.JFrame {
         sideBarListener.mouseClicked(evt);
     }//GEN-LAST:event_comingSoonBarMouseClicked
 
+    //To-do List: Validate all field, prevent duplicate data entered
     private void patientsModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleAddButtonActionPerformed
         // TODO add your handling code here:
         
@@ -1031,11 +1126,100 @@ public class Home extends javax.swing.JFrame {
         }else{
             patient = new Patient(Integer.parseInt(patientsModuleICNoTextField.getText()), patientsModuleICTextField.getText(), patientsModuleNameTextField.getText(), patientsModuleMobileNoTextField.getText(), s.format(patientsModuleDateCreatedDateChooser.getDate()));
             patientList.add(patient);
-            setModelRow();
+            savePatientsDataToFile();
+            JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+            setModelRow(patientList);
         }
         
 
     }//GEN-LAST:event_patientsModuleAddButtonActionPerformed
+    
+    //To-do List: Validate field for delete (IcNo, IC, Name, Mobile No)
+    private void patientsModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleDeleteButtonActionPerformed
+        // TODO add your handling code here:
+        if(patientsModuleICNoTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter IC No to Delete Records !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            
+        }else{
+            boolean recordFound = false;
+            
+            for(int i = 0; i < patientList.size(); i++){
+                
+                if(Integer.parseInt(patientsModuleICNoTextField.getText()) == patientList.get(i).getIcNo()){
+                    recordFound = true;
+                    int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
+                
+                    if(deleteRecord == 0){
+                        
+                        patientList.remove(patientList.get(i));
+                        savePatientsDataToFile();
+                        JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                        setModelRow(patientList);
+                        
+                    }else{
+                        
+                        JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    }
+                }
+            }
+            
+            if(recordFound != true){
+                 JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
+        }
+    }//GEN-LAST:event_patientsModuleDeleteButtonActionPerformed
+
+    //To-do List: create new jframe for the doctor to record patient info
+    private void patientsModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleSearchButtonActionPerformed
+        // TODO add your handling code here:
+        if(patientsModuleICNoTextField.getText().equals("")){
+            
+            //JOptionPane.showMessageDialog(null, "Please Enter IC No to Find Patient'S Records !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            setModelRow(patientList);
+            patientsModuleMedicalDescriptionLabel.setText(patientName);
+            patientsModuleMedicalDescriptionTextArea.setText("");
+            
+        }else{
+            boolean recordFound = false;
+            
+            for(int i = 0; i < patientList.size(); i++){
+                
+                if(Integer.parseInt(patientsModuleICNoTextField.getText()) == patientList.get(i).getIcNo()){
+                    recordFound = true;
+                    
+                    patientSearchList.add(patientList.get(i));
+                    setModelRow(patientSearchList);
+                    
+                    //clear all the patientSearchList's record
+                    patientSearchList.clear();
+                    //JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to submit ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
+                }
+            }
+            
+            if(recordFound != true){
+                 JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_patientsModuleSearchButtonActionPerformed
+
+    private void patientsModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patientsModuleTableMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) patientsModuleTable.getModel();
+        int index = patientsModuleTable.getSelectedRow();
+
+        int icNo = Integer.parseInt(model.getValueAt(index, 1).toString());
+        String name = model.getValueAt(index, 3).toString();
+        
+        for(int i = 0; i < patientList.size(); i++){
+            if(patientList.get(i).getIcNo() == icNo && patientList.get(i).getName().equals(name)){
+                patientsModuleMedicalDescriptionLabel.setText(patientName + patientList.get(i).getName());
+                patientsModuleMedicalDescriptionTextArea.setText(patientList.get(i).getMedicalDescription());
+            }
+        }
+    }//GEN-LAST:event_patientsModuleTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1105,19 +1289,23 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel patientsModule;
     private javax.swing.JButton patientsModuleAddButton;
     private com.toedter.calendar.JDateChooser patientsModuleDateCreatedDateChooser;
-    private javax.swing.JLabel patientsModuleDateCreatedLabel1;
-    private javax.swing.JButton patientsModuleDeleteButton2;
+    private javax.swing.JLabel patientsModuleDateCreatedLabel;
+    private javax.swing.JButton patientsModuleDeleteButton;
     private javax.swing.JLabel patientsModuleICLabel;
     private javax.swing.JLabel patientsModuleICNoLabel;
     private javax.swing.JTextField patientsModuleICNoTextField;
     private javax.swing.JTextField patientsModuleICTextField;
+    private javax.swing.JLabel patientsModuleMedicalDescriptionLabel;
+    private javax.swing.JScrollPane patientsModuleMedicalDescriptionScrollPane;
+    private javax.swing.JTextArea patientsModuleMedicalDescriptionTextArea;
     private javax.swing.JLabel patientsModuleMobileNoLabel;
     private javax.swing.JTextField patientsModuleMobileNoTextField;
     private javax.swing.JButton patientsModuleModifyButton;
     private javax.swing.JLabel patientsModuleNameLabel;
     private javax.swing.JTextField patientsModuleNameTextField;
     private javax.swing.JScrollPane patientsModuleScrollPane;
-    private javax.swing.JButton patientsModuleSearchButton1;
+    private javax.swing.JButton patientsModuleSearchButton;
+    private javax.swing.JButton patientsModuleSubmitButton;
     private javax.swing.JTable patientsModuleTable;
     private javax.swing.JPanel sidePanel;
     private javax.swing.JPanel staffBar;
