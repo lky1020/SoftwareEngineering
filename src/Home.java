@@ -15,7 +15,7 @@ import javax.swing.Timer;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+import java.util.regex.*;
 
 public class Home extends javax.swing.JFrame {
 
@@ -24,7 +24,10 @@ public class Home extends javax.swing.JFrame {
     private List<Patient> patientList = new ArrayList<>();
     private List<Patient> patientSearchList = new ArrayList<>();
     private Patient patient;
+    private Patient onHoldPatient;
     private String patientName; //for medical description label
+    
+    SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
     
     /**
      * Creates new form Home
@@ -38,12 +41,11 @@ public class Home extends javax.swing.JFrame {
         greetLabel.setText(greetLabel.getText() + username);
         
         Date d = new Date();
-        SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
         dateLabel.setText(dateLabel.getText() + s.format(d));
         
         
         //set the background to transparent
-        patientsModuleICNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        //patientsModuleICNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleICTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleMobileNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -78,8 +80,8 @@ public class Home extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Date d = new Date();
-                SimpleDateFormat s = new SimpleDateFormat("hh:mm:ss a");
-                timeLabel.setText(s.format(d));
+                SimpleDateFormat time = new SimpleDateFormat("hh:mm:ss a");
+                timeLabel.setText(time.format(d));
             }
             
         }).start();
@@ -138,6 +140,121 @@ public class Home extends javax.swing.JFrame {
             
         }
     }
+    
+    public void clearPatientsModuleInputField(){
+        //Clear Input Field
+        patientsModuleICTextField.setText("");
+        patientsModuleNameTextField.setText("");
+        patientsModuleMobileNoTextField.setText("");
+        patientsModuleDateCreatedDateChooser.setCalendar(null);
+    }
+    
+    public boolean validateIcNo(String icNo, String action){
+        
+        Pattern pattern = Pattern.compile("\\d{4}");
+        Matcher matcher = pattern.matcher(icNo);
+        
+        if(action.equals("Delete")){
+            
+            if(matcher.matches()){
+
+                return true;
+
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid IC No, Please Enter Again!!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            }
+            
+        }
+        
+        //Search
+        if(matcher.matches() || icNo.equals("")){
+
+             return true;
+
+        }else{
+            JOptionPane.showMessageDialog(null, "Invalid IC No, Please Enter Again!!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return false;
+
+        }
+
+    }
+    
+    public boolean validateIc(String ic){
+        Pattern pattern = Pattern.compile("\\d{6}-\\d{2}-\\d{4}");
+        Matcher matcher = pattern.matcher(ic);
+        
+        if(matcher.matches()){
+            
+            return true;
+            
+        }else{
+            
+            return false;
+            
+        }
+    }
+    
+    public boolean validateName(String name){
+        String regexName = "\\p{Upper}(\\p{Lower}+\\s?)";
+        String patternName = "(" + regexName + "){2,3}";
+        
+        if(name.matches(patternName)){
+            
+            return true;
+            
+        }else{
+            
+            return false;
+            
+        }
+    }
+    
+    public boolean validateMobileNo(String mobileNo){
+        Pattern pattern = Pattern.compile("\\d{3}-\\d{7}");
+        Matcher matcher = pattern.matcher(mobileNo);
+        
+        if(matcher.matches()){
+            
+            return true;
+            
+        }else{
+            
+            return false;
+            
+        }
+    }
+    
+    public boolean validateDateCreated(String dateCreated){
+        Pattern pattern = Pattern.compile("\\d{2}-\\d{2}-\\d{4}");
+        Matcher matcher = pattern.matcher(dateCreated);
+        
+        if(matcher.matches()){
+            
+            return true;
+            
+        }else{
+            
+            return false;
+            
+        }
+    }
+    
+    public boolean validateDuplicatePatientList(String ic, String mobileNo){
+
+        boolean noDuplicate = true;
+        
+        for(int i = 0; i < patientList.size(); i++){
+
+            if(patientList.get(i).getIc().equals(ic) || patientList.get(i).getMobileNo().equals(mobileNo)){
+                noDuplicate = false;
+            }
+        }
+        
+        return noDuplicate;
+    }
+    
     
     static int xx, yy; 
     private class SideBarListener implements MouseListener{
@@ -253,8 +370,6 @@ public class Home extends javax.swing.JFrame {
         patientsModule = new javax.swing.JPanel();
         patientsModuleScrollPane = new javax.swing.JScrollPane();
         patientsModuleTable = new javax.swing.JTable();
-        patientsModuleICNoLabel = new javax.swing.JLabel();
-        patientsModuleICNoTextField = new javax.swing.JTextField();
         patientsModuleNameLabel = new javax.swing.JLabel();
         patientsModuleNameTextField = new javax.swing.JTextField();
         patientsModuleICLabel = new javax.swing.JLabel();
@@ -270,7 +385,8 @@ public class Home extends javax.swing.JFrame {
         patientsModuleMedicalDescriptionLabel = new javax.swing.JLabel();
         patientsModuleMedicalDescriptionScrollPane = new javax.swing.JScrollPane();
         patientsModuleMedicalDescriptionTextArea = new javax.swing.JTextArea();
-        patientsModuleSubmitButton = new javax.swing.JButton();
+        patientsModuleDiagnoseButton = new javax.swing.JButton();
+        patientsModuleOnHoldButton = new javax.swing.JButton();
         appointmentsModule = new javax.swing.JPanel();
         appointmentsModuleLabel = new javax.swing.JLabel();
         medicineModule = new javax.swing.JPanel();
@@ -716,13 +832,6 @@ public class Home extends javax.swing.JFrame {
             patientsModuleTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
-        patientsModuleICNoLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
-        patientsModuleICNoLabel.setForeground(new java.awt.Color(51, 51, 51));
-        patientsModuleICNoLabel.setText("IC No :");
-
-        patientsModuleICNoTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
-        patientsModuleICNoTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-
         patientsModuleNameLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
         patientsModuleNameLabel.setForeground(new java.awt.Color(51, 51, 51));
         patientsModuleNameLabel.setText("Name :");
@@ -791,8 +900,21 @@ public class Home extends javax.swing.JFrame {
         patientsModuleMedicalDescriptionTextArea.setRows(5);
         patientsModuleMedicalDescriptionScrollPane.setViewportView(patientsModuleMedicalDescriptionTextArea);
 
-        patientsModuleSubmitButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
-        patientsModuleSubmitButton.setText("Submit");
+        patientsModuleDiagnoseButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleDiagnoseButton.setText("Diagnose");
+        patientsModuleDiagnoseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                patientsModuleDiagnoseButtonActionPerformed(evt);
+            }
+        });
+
+        patientsModuleOnHoldButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModuleOnHoldButton.setText("On Hold");
+        patientsModuleOnHoldButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                patientsModuleOnHoldButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout patientsModuleLayout = new javax.swing.GroupLayout(patientsModule);
         patientsModule.setLayout(patientsModuleLayout);
@@ -806,24 +928,22 @@ public class Home extends javax.swing.JFrame {
                             .addGroup(patientsModuleLayout.createSequentialGroup()
                                 .addComponent(patientsModuleMobileNoLabel)
                                 .addGap(0, 0, 0)
-                                .addComponent(patientsModuleMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
+                                .addComponent(patientsModuleMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(patientsModuleLayout.createSequentialGroup()
+                                .addComponent(patientsModuleICLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(patientsModuleICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(patientsModuleLayout.createSequentialGroup()
                                 .addComponent(patientsModuleDateCreatedLabel)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleDateCreatedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(patientsModuleLayout.createSequentialGroup()
-                                .addComponent(patientsModuleICNoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(patientsModuleICNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(patientsModuleICLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(patientsModuleICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
                                 .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(69, Short.MAX_VALUE))
+                        .addContainerGap(135, Short.MAX_VALUE))
                     .addGroup(patientsModuleLayout.createSequentialGroup()
                         .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(85, 85, 85)
@@ -840,11 +960,13 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(patientsModuleMedicalDescriptionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, patientsModuleLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(patientsModuleSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(patientsModuleOnHoldButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(patientsModuleDiagnoseButton)))
                 .addContainerGap())
             .addGroup(patientsModuleLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(patientsModuleMedicalDescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(patientsModuleMedicalDescriptionLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         patientsModuleLayout.setVerticalGroup(
@@ -855,9 +977,7 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(patientsModuleICLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(patientsModuleICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(patientsModuleICNoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(patientsModuleICNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(patientsModuleMobileNoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -877,7 +997,9 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(patientsModuleMedicalDescriptionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(patientsModuleSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(patientsModuleDiagnoseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModuleOnHoldButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         methodPanel.add(patientsModule, "card2");
@@ -1114,95 +1236,330 @@ public class Home extends javax.swing.JFrame {
     //To-do List: Validate all field, prevent duplicate data entered
     private void patientsModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleAddButtonActionPerformed
         // TODO add your handling code here:
-        
-        SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
-        
-        if(patientsModuleICNoTextField.getText().equals("") || patientsModuleICTextField.getText().equals("") || 
-                patientsModuleNameTextField.getText().equals("") || patientsModuleMobileNoTextField.getText().equals("") ||
-                patientsModuleDateCreatedDateChooser.getDate() == null){
+
+        if(patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") &&
+            patientsModuleMobileNoTextField.getText().equals("")){
             
-            JOptionPane.showMessageDialog(null, "Please Enter All The Input Field !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please Enter IC, Name and Mobile No of Patient !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             
-        }else{
-            patient = new Patient(Integer.parseInt(patientsModuleICNoTextField.getText()), patientsModuleICTextField.getText(), patientsModuleNameTextField.getText(), patientsModuleMobileNoTextField.getText(), s.format(patientsModuleDateCreatedDateChooser.getDate()));
-            patientList.add(patient);
-            savePatientsDataToFile();
-            JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
-            setModelRow(patientList);
         }
-        
+        else if(patientsModuleICTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter IC of Patient !!!", "Invalid IC", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(patientsModuleNameTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Name of Patient !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(patientsModuleMobileNoTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Mobile No of Patient !!!", "Invalid Mobile No", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(patientsModuleDateCreatedDateChooser.getDate() != null){
+            
+            JOptionPane.showMessageDialog(null, "Date Created is System Generated Input !!! \n Please Clear It !!!", "Clear Date Created Input", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else{
+            
+            //validate input
+            if(validateIc(patientsModuleICTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+            
+            }
+            else if(validateName(patientsModuleNameTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else if(validateMobileNo(patientsModuleMobileNoTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else if(validateDuplicatePatientList(patientsModuleICTextField.getText(), patientsModuleMobileNoTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Patient's Record Already Exist", "Patient's Record Exist", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else{
+                int icNo = Integer.parseInt(patientsModuleICTextField.getText().substring(10));
+                Date dateCreated = new Date();
+
+                patient = new Patient(icNo, patientsModuleICTextField.getText(), patientsModuleNameTextField.getText(), patientsModuleMobileNoTextField.getText(), s.format(dateCreated));
+
+                int addRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Sure to Add This Record ?</b> </html>\n" + patient, "Add Patient's Record", JOptionPane.YES_NO_OPTION);
+
+                if(addRecord == 0){
+
+                    patientList.add(patient);
+                    savePatientsDataToFile();
+                    JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                    setModelRow(patientList);
+
+                }else{
+                    
+                    JOptionPane.showMessageDialog(null, "Cancel Add Patient's Record", "Cancel Adding", JOptionPane.INFORMATION_MESSAGE);
+                
+                }
+                
+                clearPatientsModuleInputField();
+            }
+
+        }
 
     }//GEN-LAST:event_patientsModuleAddButtonActionPerformed
     
-    //To-do List: Validate field for delete (IcNo, IC, Name, Mobile No)
     private void patientsModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleDeleteButtonActionPerformed
         // TODO add your handling code here:
-        if(patientsModuleICNoTextField.getText().equals("")){
+        
+        String icNo;
+        
+        do{
             
-            JOptionPane.showMessageDialog(null, "Please Enter IC No to Delete Records !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            icNo = JOptionPane.showInputDialog("Please Enter IC No to Delete Records : ");
             
-        }else{
-            boolean recordFound = false;
+        }while(!validateIcNo(icNo, "Delete"));
+
+        
+        boolean recordFound = false;
             
-            for(int i = 0; i < patientList.size(); i++){
+        for(int i = 0; i < patientList.size(); i++){
                 
-                if(Integer.parseInt(patientsModuleICNoTextField.getText()) == patientList.get(i).getIcNo()){
-                    recordFound = true;
-                    int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
+            if(Integer.parseInt(icNo) == patientList.get(i).getIcNo()){
+               
+                recordFound = true;
+                int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
                 
-                    if(deleteRecord == 0){
+                if(deleteRecord == 0){
                         
-                        patientList.remove(patientList.get(i));
-                        savePatientsDataToFile();
+                     patientList.remove(patientList.get(i));
+                       savePatientsDataToFile();
                         JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
                         setModelRow(patientList);
                         
-                    }else{
+                }else{
                         
-                        JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
                     
-                    }
                 }
             }
-            
-            if(recordFound != true){
-                 JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
-            }
-            
         }
-    }//GEN-LAST:event_patientsModuleDeleteButtonActionPerformed
+            
+        if(recordFound != true){
+            JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+        }
 
-    //To-do List: create new jframe for the doctor to record patient info
+    }//GEN-LAST:event_patientsModuleDeleteButtonActionPerformed
+    
+    //To-do list: (ic && name) && (ic && mobile) && (name && mobile)
     private void patientsModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleSearchButtonActionPerformed
         // TODO add your handling code here:
-        if(patientsModuleICNoTextField.getText().equals("")){
-            
-            //JOptionPane.showMessageDialog(null, "Please Enter IC No to Find Patient'S Records !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-            setModelRow(patientList);
-            patientsModuleMedicalDescriptionLabel.setText(patientName);
-            patientsModuleMedicalDescriptionTextArea.setText("");
-            
-        }else{
-            boolean recordFound = false;
-            
-            for(int i = 0; i < patientList.size(); i++){
-                
-                if(Integer.parseInt(patientsModuleICNoTextField.getText()) == patientList.get(i).getIcNo()){
-                    recordFound = true;
-                    
-                    patientSearchList.add(patientList.get(i));
-                    setModelRow(patientSearchList);
-                    
-                    //clear all the patientSearchList's record
-                    patientSearchList.clear();
-                    //JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to submit ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
+        patientsModuleMedicalDescriptionLabel.setText(patientName);
+        patientsModuleMedicalDescriptionTextArea.setText("");
+        
+        //IC only
+        if(!patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+ 
+            if(validateIc(patientsModuleICTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
                 }
-            }
-            
-            if(recordFound != true){
-                 JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+
+                setModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
             }
         }
+        //Name Only
+        else if(patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+
+            if(validateName(patientsModuleNameTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleNameTextField.getText().equals(patientList.get(i).getName())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Mobile No Only
+        else if(patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            if(validateMobileNo(patientsModuleMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Date Created Only
+        else if(patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && !(patientsModuleDateCreatedDateChooser.getDate() == null)){
+            
+            if(validateDateCreated(s.format(patientsModuleDateCreatedDateChooser.getDate()))){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(s.format(patientsModuleDateCreatedDateChooser.getDate()).equals(patientList.get(i).getDateCreated())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //IC, Name, Mobile No, Date Created
+        else if(!patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && !(patientsModuleDateCreatedDateChooser.getDate() == null)){
+            
+            if(validateName(patientsModuleNameTextField.getText()) && validateName(patientsModuleNameTextField.getText()) && validateMobileNo(patientsModuleMobileNoTextField.getText()) && validateDateCreated(s.format(patientsModuleDateCreatedDateChooser.getDate()))){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc()) && patientsModuleNameTextField.getText().equals(patientList.get(i).getName()) && patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo()) && s.format(patientsModuleDateCreatedDateChooser.getDate()).equals(patientList.get(i).getDateCreated())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validateName(patientsModuleNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validateName(patientsModuleNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validateMobileNo(patientsModuleMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        else{
+
+            String icNo = JOptionPane.showInputDialog("Please Enter IC No to Search Records (Empty to Search All): ");
+
+            
+            if(icNo == null || icNo.equals("")){
+
+                setModelRow(patientList);
+
+            }else /*if(validateIcNo(icNo, "search"))*/{
+
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(Integer.parseInt(icNo) == patientList.get(i).getIcNo()){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+                        
+                    }
+                }
+
+                setModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+        
     }//GEN-LAST:event_patientsModuleSearchButtonActionPerformed
 
     private void patientsModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patientsModuleTableMouseClicked
@@ -1211,19 +1568,42 @@ public class Home extends javax.swing.JFrame {
         int index = patientsModuleTable.getSelectedRow();
 
         int icNo = Integer.parseInt(model.getValueAt(index, 1).toString());
+        String ic = model.getValueAt(index, 2).toString();
         String name = model.getValueAt(index, 3).toString();
         
+        //set Medical Description of Patient
         for(int i = 0; i < patientList.size(); i++){
-            if(patientList.get(i).getIcNo() == icNo && patientList.get(i).getName().equals(name)){
+            if(patientList.get(i).getIcNo() == icNo && patientList.get(i).getIc() == ic && patientList.get(i).getName().equals(name)){
+                patient = patientList.get(i);
                 patientsModuleMedicalDescriptionLabel.setText(patientName + patientList.get(i).getName());
                 patientsModuleMedicalDescriptionTextArea.setText(patientList.get(i).getMedicalDescription());
             }
         }
     }//GEN-LAST:event_patientsModuleTableMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
+    private void patientsModuleDiagnoseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleDiagnoseButtonActionPerformed
+        // TODO add your handling code here:
+        if(onHoldPatient != null){
+            
+            int diagnoseRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Start Diagnose this Patient ? </b> </html>\n" + onHoldPatient, "Patient's Record", JOptionPane.YES_NO_OPTION);
+        
+        }else{
+            JOptionPane.showMessageDialog(null, "On Hold Patient Not Found !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_patientsModuleDiagnoseButtonActionPerformed
+
+    private void patientsModuleOnHoldButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleOnHoldButtonActionPerformed
+        // TODO add your handling code here:
+        int addOnHoldPatient = JOptionPane.showConfirmDialog(null, "<html> <b>Add Following Patient to On Hold ? </b> </html>\n" + patient, "Patient's Record", JOptionPane.YES_NO_OPTION);
+        
+        if(addOnHoldPatient == 0){
+            //Assign the patient into the onHoldPatient for transfer to next frame after click diagnose
+            onHoldPatient = patient;
+            JOptionPane.showMessageDialog(null, "Added to On Hold Patient", "Notice", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_patientsModuleOnHoldButtonActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1291,9 +1671,8 @@ public class Home extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser patientsModuleDateCreatedDateChooser;
     private javax.swing.JLabel patientsModuleDateCreatedLabel;
     private javax.swing.JButton patientsModuleDeleteButton;
+    private javax.swing.JButton patientsModuleDiagnoseButton;
     private javax.swing.JLabel patientsModuleICLabel;
-    private javax.swing.JLabel patientsModuleICNoLabel;
-    private javax.swing.JTextField patientsModuleICNoTextField;
     private javax.swing.JTextField patientsModuleICTextField;
     private javax.swing.JLabel patientsModuleMedicalDescriptionLabel;
     private javax.swing.JScrollPane patientsModuleMedicalDescriptionScrollPane;
@@ -1303,9 +1682,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton patientsModuleModifyButton;
     private javax.swing.JLabel patientsModuleNameLabel;
     private javax.swing.JTextField patientsModuleNameTextField;
+    private javax.swing.JButton patientsModuleOnHoldButton;
     private javax.swing.JScrollPane patientsModuleScrollPane;
     private javax.swing.JButton patientsModuleSearchButton;
-    private javax.swing.JButton patientsModuleSubmitButton;
     private javax.swing.JTable patientsModuleTable;
     private javax.swing.JPanel sidePanel;
     private javax.swing.JPanel staffBar;
