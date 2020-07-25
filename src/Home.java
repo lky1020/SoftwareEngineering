@@ -23,6 +23,7 @@ public class Home extends javax.swing.JFrame {
     private DefaultTableModel patientModel;
     private List<Patient> patientList = new ArrayList<>();
     private List<Patient> patientSearchList = new ArrayList<>();
+    private List<Patient> patientOnHoldList = new ArrayList<>();
     private Patient patient;
     private Patient onHoldPatient;
     private String patientName; //for medical description label
@@ -45,7 +46,6 @@ public class Home extends javax.swing.JFrame {
         
         
         //set the background to transparent
-        //patientsModuleICNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleICTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleMobileNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -1316,42 +1316,34 @@ public class Home extends javax.swing.JFrame {
     
     private void patientsModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleDeleteButtonActionPerformed
         // TODO add your handling code here:
-        
-        String icNo;
-        
-        do{
-            
-            icNo = JOptionPane.showInputDialog("Please Enter IC No to Delete Records : ");
-            
-        }while(!validateIcNo(icNo, "Delete"));
 
-        
-        boolean recordFound = false;
-            
-        for(int i = 0; i < patientList.size(); i++){
-                
-            if(Integer.parseInt(icNo) == patientList.get(i).getIcNo()){
-               
-                recordFound = true;
-                int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
-                
-                if(deleteRecord == 0){
-                        
-                     patientList.remove(patientList.get(i));
-                       savePatientsDataToFile();
-                        JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
-                        setModelRow(patientList);
-                        
-                }else{
-                        
-                    JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
-                    
+        if(patient != null){
+
+            for(int i = 0; i < patientList.size(); i++){
+
+                if(patient.getIcNo() == patientList.get(i).getIcNo()){
+
+                    int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
+
+                    if(deleteRecord == 0){
+
+                         patientList.remove(patientList.get(i));
+                           savePatientsDataToFile();
+                            JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                            setModelRow(patientList);
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
                 }
             }
-        }
             
-        if(recordFound != true){
+        }else{
+            
             JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+        
         }
 
     }//GEN-LAST:event_patientsModuleDeleteButtonActionPerformed
@@ -1583,25 +1575,75 @@ public class Home extends javax.swing.JFrame {
 
     private void patientsModuleDiagnoseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleDiagnoseButtonActionPerformed
         // TODO add your handling code here:
-        if(onHoldPatient != null){
+        if(patientOnHoldList.size() != 0){
+
+            int diagnoseRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Start Diagnose this Patient ? </b> </html>\n" + patientOnHoldList.get(0), "Patient's Record", JOptionPane.YES_NO_CANCEL_OPTION);
             
-            int diagnoseRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Start Diagnose this Patient ? </b> </html>\n" + onHoldPatient, "Patient's Record", JOptionPane.YES_NO_OPTION);
-        
+            if(diagnoseRecord == 0){
+                
+                //Create New Frame
+                onHoldPatient = patientOnHoldList.get(0);
+                
+            }else if(diagnoseRecord == 1){
+                //Done nothing
+                
+                
+            }else if(diagnoseRecord == 2){
+                
+                JOptionPane.showMessageDialog(null, "Patient " + patientOnHoldList.get(0).getName() + " Cancel On Hold !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                patientOnHoldList.remove(0);
+            }
+            
         }else{
+            
             JOptionPane.showMessageDialog(null, "On Hold Patient Not Found !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            
         }
         
     }//GEN-LAST:event_patientsModuleDiagnoseButtonActionPerformed
 
     private void patientsModuleOnHoldButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModuleOnHoldButtonActionPerformed
         // TODO add your handling code here:
-        int addOnHoldPatient = JOptionPane.showConfirmDialog(null, "<html> <b>Add Following Patient to On Hold ? </b> </html>\n" + patient, "Patient's Record", JOptionPane.YES_NO_OPTION);
+        if(patient != null){
+            int addOnHoldPatient = JOptionPane.showConfirmDialog(null, "<html> <b>Add Following Patient to On Hold ? </b> </html>\n" + patient, "Patient's Record", JOptionPane.YES_NO_OPTION);
         
-        if(addOnHoldPatient == 0){
-            //Assign the patient into the onHoldPatient for transfer to next frame after click diagnose
-            onHoldPatient = patient;
-            JOptionPane.showMessageDialog(null, "Added to On Hold Patient", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            if(addOnHoldPatient == 0){
+                
+                if(patientOnHoldList.size() == 0){
+                    
+                    patientOnHoldList.add(patient);
+                    
+                }else{
+                    boolean duplicateOnHoldPatient = false;
+                
+                    for(int i = 0; i < patientOnHoldList.size(); i++){
+
+                        if(patient.getIc() == patientOnHoldList.get(i).getIc() || patient.getMobileNo() == patientOnHoldList.get(i).getMobileNo()){
+                            
+                            duplicateOnHoldPatient = true;
+                            
+                        }
+                        
+                    }
+                    
+                    if(duplicateOnHoldPatient == false){
+                        //Assign the patient into the onHoldPatient for transfer to next frame after click diagnose
+                        patientOnHoldList.add(patient);
+                        JOptionPane.showMessageDialog(null, "Added to On Hold Patient", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Duplicate Patient Selected !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+                    }    
+                }
+
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No Patient Selected !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            
         }
+        
     }//GEN-LAST:event_patientsModuleOnHoldButtonActionPerformed
 
     public static void main(String args[]) {
