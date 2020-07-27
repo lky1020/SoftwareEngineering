@@ -10,13 +10,16 @@ public class PatientModify extends javax.swing.JFrame {
     private PatientValidation validate = new PatientValidation();
     private Patient oldPatient;
     private Patient patient;
+    private String staffName;
     
     public PatientModify() {
         initComponents();
     }
     
-    public PatientModify(Patient patient) {
+    public PatientModify(String staffName, Patient patient) {
         initComponents();
+        
+        this.staffName = staffName;
         
         oldPatient = new Patient(patient.getIcNo(), patient.getIc(), patient.getName(), patient.getMobileNo(), patient.getDateCreated(), patient.getMedicalDescription());
         this.patient = patient;
@@ -61,13 +64,24 @@ public class PatientModify extends javax.swing.JFrame {
         modifyButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Modify Patient Record");
         setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
 
         frameTitle.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
         frameTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         frameTitle.setText("Please Enter New Info for Modification");
+        frameTitle.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                frameTitleMouseDragged(evt);
+            }
+        });
+        frameTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                frameTitleMousePressed(evt);
+            }
+        });
 
         icLabel.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
         icLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -121,6 +135,11 @@ public class PatientModify extends javax.swing.JFrame {
 
         cancelButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -380,12 +399,34 @@ public class PatientModify extends javax.swing.JFrame {
         
         if(modifySuccess){
                             
-                Home home = new Home(oldPatient, patient);
+                Home home = new Home(staffName, oldPatient, patient);
                 home.setVisible(true);
                 this.dispose();
         }
         
     }//GEN-LAST:event_modifyButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        Home home = new Home(staffName);
+        home.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+    
+    static int xx, yy;
+    private void frameTitleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameTitleMousePressed
+        // TODO add your handling code here:
+        xx = evt.getX();
+        yy = evt.getY();
+    }//GEN-LAST:event_frameTitleMousePressed
+
+    private void frameTitleMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frameTitleMouseDragged
+        // TODO add your handling code here:
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        this.setLocation(x-xx, y-yy);
+    }//GEN-LAST:event_frameTitleMouseDragged
 
     /**
      * @param args the command line arguments

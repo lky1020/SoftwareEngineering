@@ -32,6 +32,7 @@ public class Home extends javax.swing.JFrame {
     private Patient onHoldPatient;
     private Patient modifyPatient;
     private String patientName; //for medical description label
+    private String staffName;//to recrod the staff name
     
     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
     
@@ -41,13 +42,17 @@ public class Home extends javax.swing.JFrame {
     public Home (){
         initialize();
     }
-    public Home(String username) {
+    public Home(String staffName) {
         initialize();
-        greetLabel.setText(greetLabel.getText() + username);
+        this.staffName = staffName;
+        greetLabel.setText(greetLabel.getText() + this.staffName);
     }
     
-    public Home(Patient patient, Patient modifyPatient){
+    public Home(String staffName, Patient patient, Patient modifyPatient){
         initialize();
+        
+        this.staffName = staffName;
+        greetLabel.setText(greetLabel.getText() + this.staffName);
         
         this.patient = patient;
         this.modifyPatient = modifyPatient;
@@ -75,8 +80,7 @@ public class Home extends javax.swing.JFrame {
         
         Date d = new Date();
         dateLabel.setText(dateLabel.getText() + s.format(d));
-        
-        
+
         //set the background to transparent
         patientsModuleICTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -86,19 +90,6 @@ public class Home extends javax.swing.JFrame {
         
         patientsModuleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         patientName = patientsModuleMedicalDescriptionLabel.getText();
-        //hardcode Patient Records
-        /*patient = new Patient(1020, "001020-14-1020", "Lim Kah Yee", "012-6348561", "26-09-2012", "26-09-2012\nCough, Fewer\n");
-        patientList.add(patient);
-        patient = new Patient(3468, "011120-14-3468", "Wong Hui Ping", "017-3468520", "20-11-2010", "20-11-2010\nCough, Fewer\n");
-        patientList.add(patient);
-        patient = new Patient(5913, "940614-11-5913", "Tan Yan Kai", "012-3795013", "14-06-2018", "14-06-2018\nCough, Fewer\n");
-        patientList.add(patient);
-        patient = new Patient(4358, "861028-01-4358", "Loo Khai Sheng", "016-3468215", "25-12-2019", "25-12-2019\nCough, Fewer\n");
-        patientList.add(patient);
-        patient = new Patient(9245, "761023-14-9245", "Lee Wei Chian", "017-2803462", "07-07-2018", "07-07-2018\nCough, Fewer\n");
-        patientList.add(patient);
-        
-        savePatientsDataToFile();*/
 
         //read and show Patient Records
         readPatientsDataFromFile();
@@ -1805,7 +1796,7 @@ public class Home extends javax.swing.JFrame {
             int modifyPatient = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Patient's Record ? </b> </html>\n" + patient, "Patient's Record", JOptionPane.YES_NO_OPTION);
         
             if(modifyPatient == 0){
-                PatientModify patientModify = new PatientModify(patient);
+                PatientModify patientModify = new PatientModify(this.staffName, patient);
                 patientModify.setVisible(true);
                 this.dispose();
             }
@@ -1846,8 +1837,8 @@ public class Home extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new Home().setVisible(true);
-                new Home("lky1020").setVisible(true);
+                new Home().setVisible(true);
+                //new Home("lky1020").setVisible(true);
             }
         });
     }
