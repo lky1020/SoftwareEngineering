@@ -11,18 +11,21 @@ public class PatientModify extends javax.swing.JFrame {
     private Patient oldPatient;
     private Patient patient;
     private String staffName;
+    private javax.swing.JFrame frame;
     
     public PatientModify() {
         initComponents();
     }
     
-    public PatientModify(String staffName, Patient patient) {
+    public PatientModify(String staffName, Patient patient, javax.swing.JFrame frame) {
         initComponents();
         
         this.staffName = staffName;
         
         oldPatient = new Patient(patient.getIcNo(), patient.getIc(), patient.getName(), patient.getMobileNo(), patient.getDateCreated(), patient.getMedicalDescription());
         this.patient = patient;
+        
+        this.frame = frame;
         
         //set the background to transparent
         icOldTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -398,10 +401,10 @@ public class PatientModify extends javax.swing.JFrame {
         }
         
         if(modifySuccess){
-                            
-                Home home = new Home(staffName, oldPatient, patient);
-                home.setVisible(true);
-                this.dispose();
+            Home home = new Home(staffName, oldPatient, patient);
+            home.setVisible(true);
+            frame.dispose();
+            this.dispose();
         }
         
     }//GEN-LAST:event_modifyButtonActionPerformed
@@ -410,7 +413,9 @@ public class PatientModify extends javax.swing.JFrame {
         // TODO add your handling code here:
         Home home = new Home(staffName);
         home.setVisible(true);
+        frame.dispose();
         this.dispose();
+        
     }//GEN-LAST:event_cancelButtonActionPerformed
     
     static int xx, yy;

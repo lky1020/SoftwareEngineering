@@ -1796,9 +1796,9 @@ public class Home extends javax.swing.JFrame {
             int modifyPatient = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Patient's Record ? </b> </html>\n" + patient, "Patient's Record", JOptionPane.YES_NO_OPTION);
         
             if(modifyPatient == 0){
-                PatientModify patientModify = new PatientModify(this.staffName, patient);
+                PatientModify patientModify = new PatientModify(this.staffName, patient, this);
                 patientModify.setVisible(true);
-                this.dispose();
+                //this.dispose();
             }
             
         }else{
