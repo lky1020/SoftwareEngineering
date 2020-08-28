@@ -217,7 +217,6 @@ public class Home extends javax.swing.JFrame {
         return noDuplicate;
     }
     
-    
     static int xx, yy; 
     private class SideBarListener implements MouseListener{
 
@@ -350,7 +349,20 @@ public class Home extends javax.swing.JFrame {
         patientsModuleDiagnoseButton = new javax.swing.JButton();
         patientsModuleOnHoldButton = new javax.swing.JButton();
         appointmentsModule = new javax.swing.JPanel();
-        appointmentsModuleLabel = new javax.swing.JLabel();
+        appointmentsModuleScrollPane = new javax.swing.JScrollPane();
+        appointmentsModuleTable = new javax.swing.JTable();
+        appointmentsModulePatientMobileNoLabel = new javax.swing.JLabel();
+        appointmentsModulePatientMobileNoTextField = new javax.swing.JTextField();
+        appointmentsModulePatientNameLabel = new javax.swing.JLabel();
+        appointmentsModulePatientNameTextField = new javax.swing.JTextField();
+        appointmentsModuleStaffInchargeLabel = new javax.swing.JLabel();
+        appointmentsModuleStaffInchargeTextField = new javax.swing.JTextField();
+        appointmentsModuleAppointmentDateLabel = new javax.swing.JLabel();
+        appointmentsModuleAppointmentDateDateChooser = new com.toedter.calendar.JDateChooser();
+        appointmentsModuleAddButton = new javax.swing.JButton();
+        appointmentsModuleModifyButton = new javax.swing.JButton();
+        appointmentsModuleSearchButton = new javax.swing.JButton();
+        appointmentsModuleDeleteButton = new javax.swing.JButton();
         medicineModule = new javax.swing.JPanel();
         medicineModuleLabel = new javax.swing.JLabel();
         staffModule = new javax.swing.JPanel();
@@ -789,6 +801,7 @@ public class Home extends javax.swing.JFrame {
             patientsModuleTable.getColumnModel().getColumn(1).setMinWidth(40);
             patientsModuleTable.getColumnModel().getColumn(1).setMaxWidth(60);
             patientsModuleTable.getColumnModel().getColumn(2).setResizable(false);
+            patientsModuleTable.getColumnModel().getColumn(2).setHeaderValue("IC");
             patientsModuleTable.getColumnModel().getColumn(3).setResizable(false);
             patientsModuleTable.getColumnModel().getColumn(4).setResizable(false);
             patientsModuleTable.getColumnModel().getColumn(5).setResizable(false);
@@ -971,33 +984,178 @@ public class Home extends javax.swing.JFrame {
 
         methodPanel.add(patientsModule, "card2");
 
-        appointmentsModule.setBackground(new java.awt.Color(255, 51, 204));
+        appointmentsModule.setBackground(new java.awt.Color(204, 204, 204));
 
-        appointmentsModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
-        appointmentsModuleLabel.setForeground(new java.awt.Color(51, 51, 51));
-        appointmentsModuleLabel.setText("Appointments Module");
-        appointmentsModuleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 1, 0));
+        appointmentsModuleScrollPane.setBackground(new java.awt.Color(255, 255, 51));
+
+        appointmentsModuleTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No", "IC No", "Patient Name", "Patient Mobile No", "Staff Incharge", "Appointment Date"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        appointmentsModuleTable.getTableHeader().setReorderingAllowed(false);
+        appointmentsModuleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                appointmentsModuleTableMouseClicked(evt);
+            }
+        });
+        appointmentsModuleScrollPane.setViewportView(appointmentsModuleTable);
+        appointmentsModuleTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (appointmentsModuleTable.getColumnModel().getColumnCount() > 0) {
+            appointmentsModuleTable.getColumnModel().getColumn(0).setMinWidth(25);
+            appointmentsModuleTable.getColumnModel().getColumn(0).setMaxWidth(45);
+            appointmentsModuleTable.getColumnModel().getColumn(1).setMinWidth(40);
+            appointmentsModuleTable.getColumnModel().getColumn(1).setMaxWidth(60);
+            appointmentsModuleTable.getColumnModel().getColumn(2).setResizable(false);
+            appointmentsModuleTable.getColumnModel().getColumn(3).setResizable(false);
+            appointmentsModuleTable.getColumnModel().getColumn(4).setResizable(false);
+            appointmentsModuleTable.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        appointmentsModulePatientMobileNoLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        appointmentsModulePatientMobileNoLabel.setForeground(new java.awt.Color(51, 51, 51));
+        appointmentsModulePatientMobileNoLabel.setText("Patient's Mobile No : ");
+
+        appointmentsModulePatientMobileNoTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        appointmentsModulePatientMobileNoTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        appointmentsModulePatientNameLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        appointmentsModulePatientNameLabel.setForeground(new java.awt.Color(51, 51, 51));
+        appointmentsModulePatientNameLabel.setText("Patient's Name : ");
+
+        appointmentsModulePatientNameTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        appointmentsModulePatientNameTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        appointmentsModuleStaffInchargeLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        appointmentsModuleStaffInchargeLabel.setForeground(new java.awt.Color(51, 51, 51));
+        appointmentsModuleStaffInchargeLabel.setText("Staff Incharge : ");
+
+        appointmentsModuleStaffInchargeTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        appointmentsModuleStaffInchargeTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        appointmentsModuleAppointmentDateLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        appointmentsModuleAppointmentDateLabel.setForeground(new java.awt.Color(51, 51, 51));
+        appointmentsModuleAppointmentDateLabel.setText("Appointment Date : ");
+
+        appointmentsModuleAppointmentDateDateChooser.setDateFormatString("dd-MM-yyyy");
+        appointmentsModuleAppointmentDateDateChooser.setDoubleBuffered(false);
+        appointmentsModuleAppointmentDateDateChooser.setMaxSelectableDate(new java.util.Date(253370739701000L));
+        appointmentsModuleAppointmentDateDateChooser.setMinSelectableDate(new java.util.Date(946659701000L));
+        appointmentsModuleAppointmentDateDateChooser.setOpaque(false);
+
+        appointmentsModuleAddButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        appointmentsModuleAddButton.setText("Add");
+        appointmentsModuleAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appointmentsModuleAddButtonActionPerformed(evt);
+            }
+        });
+
+        appointmentsModuleModifyButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        appointmentsModuleModifyButton.setText("Modify");
+        appointmentsModuleModifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appointmentsModuleModifyButtonActionPerformed(evt);
+            }
+        });
+
+        appointmentsModuleSearchButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        appointmentsModuleSearchButton.setText("Search");
+        appointmentsModuleSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appointmentsModuleSearchButtonActionPerformed(evt);
+            }
+        });
+
+        appointmentsModuleDeleteButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        appointmentsModuleDeleteButton.setText("Delete");
+        appointmentsModuleDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appointmentsModuleDeleteButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout appointmentsModuleLayout = new javax.swing.GroupLayout(appointmentsModule);
         appointmentsModule.setLayout(appointmentsModuleLayout);
         appointmentsModuleLayout.setHorizontalGroup(
             appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(appointmentsModuleLabel)
-                .addContainerGap(468, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                        .addComponent(appointmentsModulePatientNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(appointmentsModulePatientNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                        .addComponent(appointmentsModuleStaffInchargeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                        .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(94, 94, 94)
+                        .addComponent(appointmentsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(31, 31, 31)
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                        .addComponent(appointmentsModulePatientMobileNoLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(appointmentsModulePatientMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                            .addComponent(appointmentsModuleAppointmentDateLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(appointmentsModuleAppointmentDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(225, 225, 225))
+                    .addComponent(appointmentsModuleScrollPane)))
         );
         appointmentsModuleLayout.setVerticalGroup(
             appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(appointmentsModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(458, Short.MAX_VALUE))
+                .addGap(3, 3, 3)
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(appointmentsModulePatientNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(appointmentsModulePatientNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModulePatientMobileNoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(appointmentsModulePatientMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(appointmentsModuleStaffInchargeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModuleAppointmentDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModuleAppointmentDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(appointmentsModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
 
         methodPanel.add(appointmentsModule, "card3");
 
-        medicineModule.setBackground(new java.awt.Color(255, 255, 0));
+        medicineModule.setBackground(new java.awt.Color(204, 204, 204));
 
         medicineModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
         medicineModuleLabel.setForeground(new java.awt.Color(51, 51, 51));
@@ -1023,7 +1181,7 @@ public class Home extends javax.swing.JFrame {
 
         methodPanel.add(medicineModule, "card4");
 
-        staffModule.setBackground(new java.awt.Color(102, 255, 102));
+        staffModule.setBackground(new java.awt.Color(204, 204, 204));
 
         staffModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
         staffModuleLabel.setForeground(new java.awt.Color(51, 51, 51));
@@ -1810,6 +1968,26 @@ public class Home extends javax.swing.JFrame {
         
     }//GEN-LAST:event_patientsModuleModifyButtonActionPerformed
 
+    private void appointmentsModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appointmentsModuleTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_appointmentsModuleTableMouseClicked
+
+    private void appointmentsModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleAddButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_appointmentsModuleAddButtonActionPerformed
+
+    private void appointmentsModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleModifyButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_appointmentsModuleModifyButtonActionPerformed
+
+    private void appointmentsModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleSearchButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_appointmentsModuleSearchButtonActionPerformed
+
+    private void appointmentsModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleDeleteButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_appointmentsModuleDeleteButtonActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1849,7 +2027,20 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel appointmentsLabel;
     private javax.swing.JLabel appointmentsLogo;
     private javax.swing.JPanel appointmentsModule;
-    private javax.swing.JLabel appointmentsModuleLabel;
+    private javax.swing.JButton appointmentsModuleAddButton;
+    private com.toedter.calendar.JDateChooser appointmentsModuleAppointmentDateDateChooser;
+    private javax.swing.JLabel appointmentsModuleAppointmentDateLabel;
+    private javax.swing.JButton appointmentsModuleDeleteButton;
+    private javax.swing.JButton appointmentsModuleModifyButton;
+    private javax.swing.JLabel appointmentsModulePatientMobileNoLabel;
+    private javax.swing.JTextField appointmentsModulePatientMobileNoTextField;
+    private javax.swing.JLabel appointmentsModulePatientNameLabel;
+    private javax.swing.JTextField appointmentsModulePatientNameTextField;
+    private javax.swing.JScrollPane appointmentsModuleScrollPane;
+    private javax.swing.JButton appointmentsModuleSearchButton;
+    private javax.swing.JLabel appointmentsModuleStaffInchargeLabel;
+    private javax.swing.JTextField appointmentsModuleStaffInchargeTextField;
+    private javax.swing.JTable appointmentsModuleTable;
     private javax.swing.JLabel clinicLogo;
     private javax.swing.JLabel closeLabel;
     private javax.swing.JPanel comingSoonBar;
