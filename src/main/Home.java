@@ -68,7 +68,7 @@ public class Home extends javax.swing.JFrame {
         
         savePatientsDataToFile();
         JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
-        setModelRow(patientList);
+        setPatientModelRow(patientList);
         
     }
 
@@ -81,6 +81,7 @@ public class Home extends javax.swing.JFrame {
         Date d = new Date();
         dateLabel.setText(dateLabel.getText() + s.format(d));
 
+        //Patient Module
         //set the background to transparent
         patientsModuleICTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         patientsModuleNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -94,7 +95,29 @@ public class Home extends javax.swing.JFrame {
         //read and show Patient Records
         readPatientsDataFromFile();
         patientModel = (DefaultTableModel)patientsModuleTable.getModel();
-        setModelRow(patientList);
+        setPatientModelRow(patientList);
+        
+        //Appointment Module
+        //set the background to transparent
+        appointmentsModulePatientNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        appointmentsModulePatientMobileNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        appointmentsModuleStaffInchargeTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        
+        //Medicine Module
+        //set the background to transparent
+        medicineModuleMedicineIDTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        medicineModuleMedicineNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        medicineModuleMedicineQuantityTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        medicineModuleMedicineUnitPriceTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        
+        //Staff Module
+        //set the background to transparent
+        staffModuleStaffIDTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        staffModuleStaffNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        staffModuleStaffDesignationTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        staffModuleStaffMobileNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        
+        
     }
     
     public void showTime(){
@@ -109,7 +132,7 @@ public class Home extends javax.swing.JFrame {
         }).start();
     }
     
-    private void setModelRow(List<Patient> arrayList){
+    private void setPatientModelRow(List<Patient> arrayList){
 
         patientModel.setRowCount(0);
         
@@ -217,12 +240,76 @@ public class Home extends javax.swing.JFrame {
         return noDuplicate;
     }
     
+    public void setBackground(boolean patient, boolean appointments, boolean medicine, boolean staff, boolean comingSoon){
+        if(patient){
+            
+            patientHoverPanel.setBackground( new Color(2, 165, 249));
+            patientBar.setBackground( new Color(63, 218, 234));
+            
+        }else{
+            
+            patientHoverPanel.setBackground( new Color(255, 255, 255));
+            patientBar.setBackground( new Color(255, 255, 255));
+            
+        }
+        
+        if(appointments){
+            
+            appointmentsHoverPanel.setBackground( new Color(2, 165, 249));
+            appointmentsBar.setBackground( new Color(63, 218, 234));
+            
+        }else{
+            
+            appointmentsHoverPanel.setBackground( new Color(255, 255, 255));
+            appointmentsBar.setBackground( new Color(255, 255, 255));
+            
+        }
+        
+        if(medicine){
+            
+            medicineHoverPanel.setBackground( new Color(2, 165, 249));
+            medicineBar.setBackground( new Color(63, 218, 234));
+            
+        }else{
+            
+            medicineHoverPanel.setBackground( new Color(255, 255, 255));
+            medicineBar.setBackground( new Color(255, 255, 255));
+            
+        }
+        
+        if(staff){
+            
+            staffHoverPanel.setBackground( new Color(2, 165, 249));
+            staffBar.setBackground( new Color(63, 218, 234));
+            
+        }else{
+            
+            staffHoverPanel.setBackground( new Color(255, 255, 255));
+            staffBar.setBackground( new Color(255, 255, 255));
+            
+        }
+        
+        if(comingSoon){
+            
+            comingSoonHoverPanel.setBackground( new Color(2, 165, 249));
+            comingSoonBar.setBackground( new Color(63, 218, 234));
+            
+        }else{
+            
+            comingSoonHoverPanel.setBackground( new Color(255, 255, 255));
+            comingSoonBar.setBackground( new Color(255, 255, 255));
+            
+        }
+    }
+    
     static int xx, yy; 
     private class SideBarListener implements MouseListener{
 
         @Override
         public void mouseClicked(MouseEvent e) {
             if(e.getSource() == patientBar){
+                setBackground(true, false, false, false, false);
+                
                 patientsModule.setVisible(true);
                 appointmentsModule.setVisible(false);
                 medicineModule.setVisible(false);
@@ -230,6 +317,8 @@ public class Home extends javax.swing.JFrame {
             }
             
             if(e.getSource() == appointmentsBar){
+                setBackground(false, true, false, false, false);
+                
                 patientsModule.setVisible(false);
                 appointmentsModule.setVisible(true);
                 medicineModule.setVisible(false);
@@ -237,6 +326,8 @@ public class Home extends javax.swing.JFrame {
             }
             
             if(e.getSource() == medicineBar){
+                setBackground(false, false, true, false, false);
+                
                 patientsModule.setVisible(false);
                 appointmentsModule.setVisible(false);
                 medicineModule.setVisible(true);
@@ -244,6 +335,8 @@ public class Home extends javax.swing.JFrame {
             }
             
             if(e.getSource() == staffBar){
+                setBackground(false, false, false, true, false);
+                
                 patientsModule.setVisible(false);
                 appointmentsModule.setVisible(false);
                 medicineModule.setVisible(false);
@@ -251,6 +344,8 @@ public class Home extends javax.swing.JFrame {
             }
             
             if(e.getSource() == comingSoonBar){
+                setBackground(false, false, false, false, true);
+                
                 patientsModule.setVisible(false);
                 appointmentsModule.setVisible(false);
                 medicineModule.setVisible(false);
@@ -273,17 +368,22 @@ public class Home extends javax.swing.JFrame {
         public void mouseEntered(MouseEvent e) {
             JPanel panel = (JPanel)e.getSource(); 
             Component[] label = panel.getComponents();
-            label[0].setBackground( new Color(2, 165, 249));
-            panel.setBackground( new Color(63, 218, 234));
             
+            if(!label[0].getBackground().equals(new Color(2, 165, 249))){
+                label[0].setBackground( new Color(2, 165, 248));
+                panel.setBackground( new Color(63, 218, 234));
+            }
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
             JPanel panel = (JPanel)e.getSource();
             Component[] label = panel.getComponents();
-            label[0].setBackground( new Color(255, 255, 255));
-            panel.setBackground( new Color(255, 255, 255));
+
+            if(label[0].getBackground().equals(new Color(2, 165, 248))){
+                label[0].setBackground( new Color(255, 255, 255));
+                panel.setBackground( new Color(255, 255, 255));
+            }
         }
 
         
@@ -364,9 +464,39 @@ public class Home extends javax.swing.JFrame {
         appointmentsModuleSearchButton = new javax.swing.JButton();
         appointmentsModuleDeleteButton = new javax.swing.JButton();
         medicineModule = new javax.swing.JPanel();
-        medicineModuleLabel = new javax.swing.JLabel();
+        medicineModuleScrollPane = new javax.swing.JScrollPane();
+        medicineModuleTable = new javax.swing.JTable();
+        medicineModuleMedicineNameLabel = new javax.swing.JLabel();
+        medicineModuleMedicineNameTextField = new javax.swing.JTextField();
+        medicineModuleMedicineIDLabel = new javax.swing.JLabel();
+        medicineModuleMedicineIDTextField = new javax.swing.JTextField();
+        medicineModuleMedicineQuantityLabel = new javax.swing.JLabel();
+        medicineModuleMedicineQuantityTextField = new javax.swing.JTextField();
+        medicineModuleMedicineExpiredDateLabel = new javax.swing.JLabel();
+        medicineModuleMedicineExpiredDateDateChooser = new com.toedter.calendar.JDateChooser();
+        medicineModuleAddButton = new javax.swing.JButton();
+        medicineModuleModifyButton = new javax.swing.JButton();
+        medicineModuleSearchButton = new javax.swing.JButton();
+        medicineModuleDeleteButton = new javax.swing.JButton();
+        medicineModuleMedicineUnitPriceLabel = new javax.swing.JLabel();
+        medicineModuleMedicineUnitPriceTextField = new javax.swing.JTextField();
         staffModule = new javax.swing.JPanel();
-        staffModuleLabel = new javax.swing.JLabel();
+        staffModuleScrollPane = new javax.swing.JScrollPane();
+        staffModuleTable = new javax.swing.JTable();
+        staffModuleStaffNameLabel = new javax.swing.JLabel();
+        staffModuleStaffNameTextField = new javax.swing.JTextField();
+        staffModuleStaffIDLabel = new javax.swing.JLabel();
+        staffModuleStaffIDTextField = new javax.swing.JTextField();
+        staffModuleStaffMobileNoLabel = new javax.swing.JLabel();
+        staffModuleStaffMobileNoTextField = new javax.swing.JTextField();
+        staffModuleStaffDateJoinedLabel = new javax.swing.JLabel();
+        staffModuleStaffDateJoinedDateChooser = new com.toedter.calendar.JDateChooser();
+        staffModuleAddButton = new javax.swing.JButton();
+        staffModuleModifyButton = new javax.swing.JButton();
+        staffModuleSearchButton = new javax.swing.JButton();
+        staffModuleDeleteButton = new javax.swing.JButton();
+        staffModuleStaffDesignationLabel = new javax.swing.JLabel();
+        staffModuleStaffDesignationTextField = new javax.swing.JTextField();
         comingSoonModule = new javax.swing.JPanel();
         comingSoonModuleLogo = new javax.swing.JLabel();
         comingSoonModuleLabel = new javax.swing.JLabel();
@@ -677,9 +807,7 @@ public class Home extends javax.swing.JFrame {
             staffBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(staffLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
             .addComponent(staffLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(staffBarLayout.createSequentialGroup()
-                .addComponent(staffHoverPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(staffHoverPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         comingSoonBar.setBackground(new java.awt.Color(255, 255, 255));
@@ -913,7 +1041,7 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(patientsModuleICLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(28, 28, 28)
+                        .addGap(60, 60, 60)
                         .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(patientsModuleLayout.createSequentialGroup()
                                 .addComponent(patientsModuleDateCreatedLabel)
@@ -923,7 +1051,7 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(135, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(patientsModuleLayout.createSequentialGroup()
                         .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(85, 85, 85)
@@ -1015,11 +1143,12 @@ public class Home extends javax.swing.JFrame {
         if (appointmentsModuleTable.getColumnModel().getColumnCount() > 0) {
             appointmentsModuleTable.getColumnModel().getColumn(0).setMinWidth(25);
             appointmentsModuleTable.getColumnModel().getColumn(0).setMaxWidth(45);
-            appointmentsModuleTable.getColumnModel().getColumn(1).setMinWidth(40);
-            appointmentsModuleTable.getColumnModel().getColumn(1).setMaxWidth(60);
+            appointmentsModuleTable.getColumnModel().getColumn(1).setResizable(false);
+            appointmentsModuleTable.getColumnModel().getColumn(1).setPreferredWidth(25);
             appointmentsModuleTable.getColumnModel().getColumn(2).setResizable(false);
             appointmentsModuleTable.getColumnModel().getColumn(3).setResizable(false);
             appointmentsModuleTable.getColumnModel().getColumn(4).setResizable(false);
+            appointmentsModuleTable.getColumnModel().getColumn(4).setHeaderValue("Unit Price (RM)");
             appointmentsModuleTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
@@ -1102,8 +1231,9 @@ public class Home extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
                         .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(94, 94, 94)
+                        .addGap(85, 85, 85)
                         .addComponent(appointmentsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(31, 31, 31)
                 .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1111,8 +1241,12 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(appointmentsModulePatientMobileNoLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(appointmentsModulePatientMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                            .addGap(58, 58, 58)
+                            .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(appointmentsModuleLayout.createSequentialGroup()
                             .addComponent(appointmentsModuleAppointmentDateLabel)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1120,12 +1254,7 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(appointmentsModuleLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(225, 225, 225))
-                    .addComponent(appointmentsModuleScrollPane)))
+                .addComponent(appointmentsModuleScrollPane))
         );
         appointmentsModuleLayout.setVerticalGroup(
             appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1137,11 +1266,12 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(appointmentsModulePatientMobileNoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(appointmentsModulePatientMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(appointmentsModuleStaffInchargeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(appointmentsModuleAppointmentDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(appointmentsModuleAppointmentDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(appointmentsModuleAppointmentDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(appointmentsModuleStaffInchargeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(appointmentsModuleAppointmentDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(27, 27, 27)
                 .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1157,52 +1287,372 @@ public class Home extends javax.swing.JFrame {
 
         medicineModule.setBackground(new java.awt.Color(204, 204, 204));
 
-        medicineModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
-        medicineModuleLabel.setForeground(new java.awt.Color(51, 51, 51));
-        medicineModuleLabel.setText("Medicine Module");
-        medicineModuleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 1, 0));
+        medicineModuleScrollPane.setBackground(new java.awt.Color(255, 255, 51));
+
+        medicineModuleTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No", "ID", "Medicine Name", "Quantity", "Unit Price (RM)", "Expired Date"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        medicineModuleTable.setColumnSelectionAllowed(true);
+        medicineModuleTable.getTableHeader().setReorderingAllowed(false);
+        medicineModuleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                medicineModuleTableMouseClicked(evt);
+            }
+        });
+        medicineModuleScrollPane.setViewportView(medicineModuleTable);
+        medicineModuleTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (medicineModuleTable.getColumnModel().getColumnCount() > 0) {
+            medicineModuleTable.getColumnModel().getColumn(0).setMinWidth(25);
+            medicineModuleTable.getColumnModel().getColumn(0).setMaxWidth(45);
+            medicineModuleTable.getColumnModel().getColumn(1).setResizable(false);
+            medicineModuleTable.getColumnModel().getColumn(1).setPreferredWidth(25);
+            medicineModuleTable.getColumnModel().getColumn(2).setResizable(false);
+            medicineModuleTable.getColumnModel().getColumn(3).setResizable(false);
+            medicineModuleTable.getColumnModel().getColumn(4).setResizable(false);
+            medicineModuleTable.getColumnModel().getColumn(4).setHeaderValue("Unit Price (RM)");
+            medicineModuleTable.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        medicineModuleMedicineNameLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        medicineModuleMedicineNameLabel.setForeground(new java.awt.Color(51, 51, 51));
+        medicineModuleMedicineNameLabel.setText("Medicine Name : ");
+
+        medicineModuleMedicineNameTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        medicineModuleMedicineNameTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        medicineModuleMedicineIDLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        medicineModuleMedicineIDLabel.setForeground(new java.awt.Color(51, 51, 51));
+        medicineModuleMedicineIDLabel.setText("Medicine's ID : ");
+
+        medicineModuleMedicineIDTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        medicineModuleMedicineIDTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        medicineModuleMedicineQuantityLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        medicineModuleMedicineQuantityLabel.setForeground(new java.awt.Color(51, 51, 51));
+        medicineModuleMedicineQuantityLabel.setText("Quantity : ");
+
+        medicineModuleMedicineQuantityTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        medicineModuleMedicineQuantityTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        medicineModuleMedicineExpiredDateLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        medicineModuleMedicineExpiredDateLabel.setForeground(new java.awt.Color(51, 51, 51));
+        medicineModuleMedicineExpiredDateLabel.setText("Expired Date : ");
+
+        medicineModuleMedicineExpiredDateDateChooser.setDateFormatString("dd-MM-yyyy");
+        medicineModuleMedicineExpiredDateDateChooser.setDoubleBuffered(false);
+        medicineModuleMedicineExpiredDateDateChooser.setMaxSelectableDate(new java.util.Date(253370739701000L));
+        medicineModuleMedicineExpiredDateDateChooser.setMinSelectableDate(new java.util.Date(946659701000L));
+        medicineModuleMedicineExpiredDateDateChooser.setOpaque(false);
+
+        medicineModuleAddButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        medicineModuleAddButton.setText("Add");
+        medicineModuleAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                medicineModuleAddButtonActionPerformed(evt);
+            }
+        });
+
+        medicineModuleModifyButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        medicineModuleModifyButton.setText("Modify");
+        medicineModuleModifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                medicineModuleModifyButtonActionPerformed(evt);
+            }
+        });
+
+        medicineModuleSearchButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        medicineModuleSearchButton.setText("Search");
+        medicineModuleSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                medicineModuleSearchButtonActionPerformed(evt);
+            }
+        });
+
+        medicineModuleDeleteButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        medicineModuleDeleteButton.setText("Delete");
+        medicineModuleDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                medicineModuleDeleteButtonActionPerformed(evt);
+            }
+        });
+
+        medicineModuleMedicineUnitPriceLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        medicineModuleMedicineUnitPriceLabel.setForeground(new java.awt.Color(51, 51, 51));
+        medicineModuleMedicineUnitPriceLabel.setText("Unit Price (RM) : ");
+
+        medicineModuleMedicineUnitPriceTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        medicineModuleMedicineUnitPriceTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout medicineModuleLayout = new javax.swing.GroupLayout(medicineModule);
         medicineModule.setLayout(medicineModuleLayout);
         medicineModuleLayout.setHorizontalGroup(
             medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(medicineModuleLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(medicineModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(517, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(medicineModuleLayout.createSequentialGroup()
+                        .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(medicineModuleLayout.createSequentialGroup()
+                                .addComponent(medicineModuleMedicineIDLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(medicineModuleMedicineIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(medicineModuleLayout.createSequentialGroup()
+                                .addComponent(medicineModuleMedicineUnitPriceLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(medicineModuleMedicineUnitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(6, 6, 6)
+                        .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(medicineModuleLayout.createSequentialGroup()
+                                .addComponent(medicineModuleMedicineNameLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(medicineModuleMedicineNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(medicineModuleMedicineQuantityLabel))
+                            .addGroup(medicineModuleLayout.createSequentialGroup()
+                                .addComponent(medicineModuleMedicineExpiredDateLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(medicineModuleMedicineExpiredDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(medicineModuleMedicineQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(medicineModuleLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(medicineModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(85, 85, 85)
+                        .addComponent(medicineModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(medicineModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84)
+                        .addComponent(medicineModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46))))
+            .addGroup(medicineModuleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(medicineModuleScrollPane))
         );
         medicineModuleLayout.setVerticalGroup(
             medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(medicineModuleLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(medicineModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(458, Short.MAX_VALUE))
+                .addGap(1, 1, 1)
+                .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(medicineModuleMedicineIDLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(medicineModuleMedicineIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleMedicineNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(medicineModuleMedicineNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleMedicineQuantityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleMedicineQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(medicineModuleMedicineExpiredDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleMedicineExpiredDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(medicineModuleMedicineUnitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(medicineModuleMedicineUnitPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(0, 33, Short.MAX_VALUE)
+                .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(medicineModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medicineModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(medicineModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
 
         methodPanel.add(medicineModule, "card4");
 
         staffModule.setBackground(new java.awt.Color(204, 204, 204));
 
-        staffModuleLabel.setFont(new java.awt.Font(".Heiti J", 1, 24)); // NOI18N
-        staffModuleLabel.setForeground(new java.awt.Color(51, 51, 51));
-        staffModuleLabel.setText("Staff Module");
-        staffModuleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 1, 0));
+        staffModuleScrollPane.setBackground(new java.awt.Color(255, 255, 51));
+
+        staffModuleTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No", "ID", "Name", "Designation", "Mobile No", "Date Joined"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        staffModuleTable.getTableHeader().setReorderingAllowed(false);
+        staffModuleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                staffModuleTableMouseClicked(evt);
+            }
+        });
+        staffModuleScrollPane.setViewportView(staffModuleTable);
+        staffModuleTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (staffModuleTable.getColumnModel().getColumnCount() > 0) {
+            staffModuleTable.getColumnModel().getColumn(0).setMinWidth(25);
+            staffModuleTable.getColumnModel().getColumn(0).setMaxWidth(45);
+            staffModuleTable.getColumnModel().getColumn(1).setResizable(false);
+            staffModuleTable.getColumnModel().getColumn(1).setPreferredWidth(25);
+            staffModuleTable.getColumnModel().getColumn(2).setResizable(false);
+            staffModuleTable.getColumnModel().getColumn(4).setResizable(false);
+            staffModuleTable.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        staffModuleStaffNameLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        staffModuleStaffNameLabel.setForeground(new java.awt.Color(51, 51, 51));
+        staffModuleStaffNameLabel.setText("Name : ");
+
+        staffModuleStaffNameTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        staffModuleStaffNameTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        staffModuleStaffIDLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        staffModuleStaffIDLabel.setForeground(new java.awt.Color(51, 51, 51));
+        staffModuleStaffIDLabel.setText("ID : ");
+
+        staffModuleStaffIDTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        staffModuleStaffIDTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        staffModuleStaffMobileNoLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        staffModuleStaffMobileNoLabel.setForeground(new java.awt.Color(51, 51, 51));
+        staffModuleStaffMobileNoLabel.setText("Mobile No : ");
+
+        staffModuleStaffMobileNoTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        staffModuleStaffMobileNoTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        staffModuleStaffDateJoinedLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        staffModuleStaffDateJoinedLabel.setForeground(new java.awt.Color(51, 51, 51));
+        staffModuleStaffDateJoinedLabel.setText("Date Joined : ");
+
+        staffModuleStaffDateJoinedDateChooser.setDateFormatString("dd-MM-yyyy");
+        staffModuleStaffDateJoinedDateChooser.setDoubleBuffered(false);
+        staffModuleStaffDateJoinedDateChooser.setMaxSelectableDate(new java.util.Date(253370739701000L));
+        staffModuleStaffDateJoinedDateChooser.setMinSelectableDate(new java.util.Date(946659701000L));
+        staffModuleStaffDateJoinedDateChooser.setOpaque(false);
+
+        staffModuleAddButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        staffModuleAddButton.setText("Add");
+        staffModuleAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffModuleAddButtonActionPerformed(evt);
+            }
+        });
+
+        staffModuleModifyButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        staffModuleModifyButton.setText("Modify");
+        staffModuleModifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffModuleModifyButtonActionPerformed(evt);
+            }
+        });
+
+        staffModuleSearchButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        staffModuleSearchButton.setText("Search");
+        staffModuleSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffModuleSearchButtonActionPerformed(evt);
+            }
+        });
+
+        staffModuleDeleteButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        staffModuleDeleteButton.setText("Delete");
+        staffModuleDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffModuleDeleteButtonActionPerformed(evt);
+            }
+        });
+
+        staffModuleStaffDesignationLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        staffModuleStaffDesignationLabel.setForeground(new java.awt.Color(51, 51, 51));
+        staffModuleStaffDesignationLabel.setText("Designation : ");
+
+        staffModuleStaffDesignationTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        staffModuleStaffDesignationTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout staffModuleLayout = new javax.swing.GroupLayout(staffModule);
         staffModule.setLayout(staffModuleLayout);
         staffModuleLayout.setHorizontalGroup(
             staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(staffModuleLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(staffModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(517, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(staffModuleLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(staffModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(85, 85, 85)
+                        .addComponent(staffModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addComponent(staffModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84)
+                        .addComponent(staffModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46))
+                    .addGroup(staffModuleLayout.createSequentialGroup()
+                        .addComponent(staffModuleStaffMobileNoLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(staffModuleStaffMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(staffModuleStaffDateJoinedLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(staffModuleStaffDateJoinedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 68, 68))
+                    .addGroup(staffModuleLayout.createSequentialGroup()
+                        .addComponent(staffModuleStaffIDLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(staffModuleStaffIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93)
+                        .addComponent(staffModuleStaffNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(staffModuleStaffNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(staffModuleStaffDesignationLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(staffModuleStaffDesignationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(staffModuleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(staffModuleScrollPane))
         );
         staffModuleLayout.setVerticalGroup(
             staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(staffModuleLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(staffModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(458, Short.MAX_VALUE))
+                .addGap(3, 3, 3)
+                .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(staffModuleStaffDesignationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(staffModuleStaffNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(staffModuleStaffNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(staffModuleStaffDesignationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(staffModuleStaffIDLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(staffModuleStaffIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26)
+                .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(staffModuleStaffMobileNoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(staffModuleStaffMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(staffModuleStaffDateJoinedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(staffModuleStaffDateJoinedDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(staffModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(staffModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(staffModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(staffModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(staffModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
 
         methodPanel.add(staffModule, "card5");
@@ -1223,16 +1673,16 @@ public class Home extends javax.swing.JFrame {
         comingSoonModuleLayout.setHorizontalGroup(
             comingSoonModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(comingSoonModuleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+            .addComponent(comingSoonModuleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 739, Short.MAX_VALUE)
         );
         comingSoonModuleLayout.setVerticalGroup(
             comingSoonModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(comingSoonModuleLayout.createSequentialGroup()
                 .addGap(74, 74, 74)
                 .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(comingSoonModuleLabel)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comingSoonModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         methodPanel.add(comingSoonModule, "card5");
@@ -1244,12 +1694,11 @@ public class Home extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(methodPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                    .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1424,7 +1873,7 @@ public class Home extends javax.swing.JFrame {
                     patientList.add(patient);
                     savePatientsDataToFile();
                     JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
-                    setModelRow(patientList);
+                    setPatientModelRow(patientList);
 
                 }else{
                     
@@ -1455,7 +1904,7 @@ public class Home extends javax.swing.JFrame {
                          patientList.remove(patientList.get(i));
                            savePatientsDataToFile();
                             JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
-                            setModelRow(patientList);
+                            setPatientModelRow(patientList);
 
                     }else{
 
@@ -1496,7 +1945,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1525,7 +1974,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1554,7 +2003,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1583,7 +2032,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1612,7 +2061,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1659,7 +2108,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1712,7 +2161,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1753,7 +2202,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1794,7 +2243,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1825,7 +2274,7 @@ public class Home extends javax.swing.JFrame {
             
             if(icNo == null || icNo.equals("")){
 
-                setModelRow(patientList);
+                setPatientModelRow(patientList);
 
             }else /*if(validateIcNo(icNo, "search"))*/{
 
@@ -1842,7 +2291,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
 
-                setModelRow(patientSearchList);
+                setPatientModelRow(patientSearchList);
                 //clear all the patientSearchList's record
                 patientSearchList.clear();
 
@@ -1988,6 +2437,46 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_appointmentsModuleDeleteButtonActionPerformed
 
+    private void medicineModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicineModuleTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_medicineModuleTableMouseClicked
+
+    private void medicineModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleAddButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_medicineModuleAddButtonActionPerformed
+
+    private void medicineModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleModifyButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_medicineModuleModifyButtonActionPerformed
+
+    private void medicineModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleSearchButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_medicineModuleSearchButtonActionPerformed
+
+    private void medicineModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleDeleteButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_medicineModuleDeleteButtonActionPerformed
+
+    private void staffModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staffModuleTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffModuleTableMouseClicked
+
+    private void staffModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleAddButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffModuleAddButtonActionPerformed
+
+    private void staffModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleModifyButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffModuleModifyButtonActionPerformed
+
+    private void staffModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleSearchButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffModuleSearchButtonActionPerformed
+
+    private void staffModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleDeleteButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_staffModuleDeleteButtonActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2058,7 +2547,22 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel medicineLabel;
     private javax.swing.JLabel medicineLogo;
     private javax.swing.JPanel medicineModule;
-    private javax.swing.JLabel medicineModuleLabel;
+    private javax.swing.JButton medicineModuleAddButton;
+    private javax.swing.JButton medicineModuleDeleteButton;
+    private com.toedter.calendar.JDateChooser medicineModuleMedicineExpiredDateDateChooser;
+    private javax.swing.JLabel medicineModuleMedicineExpiredDateLabel;
+    private javax.swing.JLabel medicineModuleMedicineIDLabel;
+    private javax.swing.JTextField medicineModuleMedicineIDTextField;
+    private javax.swing.JLabel medicineModuleMedicineNameLabel;
+    private javax.swing.JTextField medicineModuleMedicineNameTextField;
+    private javax.swing.JLabel medicineModuleMedicineQuantityLabel;
+    private javax.swing.JTextField medicineModuleMedicineQuantityTextField;
+    private javax.swing.JLabel medicineModuleMedicineUnitPriceLabel;
+    private javax.swing.JTextField medicineModuleMedicineUnitPriceTextField;
+    private javax.swing.JButton medicineModuleModifyButton;
+    private javax.swing.JScrollPane medicineModuleScrollPane;
+    private javax.swing.JButton medicineModuleSearchButton;
+    private javax.swing.JTable medicineModuleTable;
     private javax.swing.JPanel methodPanel;
     private javax.swing.JPanel patientBar;
     private javax.swing.JPanel patientHoverPanel;
@@ -2090,7 +2594,22 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel staffLabel;
     private javax.swing.JLabel staffLogo;
     private javax.swing.JPanel staffModule;
-    private javax.swing.JLabel staffModuleLabel;
+    private javax.swing.JButton staffModuleAddButton;
+    private javax.swing.JButton staffModuleDeleteButton;
+    private javax.swing.JButton staffModuleModifyButton;
+    private javax.swing.JScrollPane staffModuleScrollPane;
+    private javax.swing.JButton staffModuleSearchButton;
+    private com.toedter.calendar.JDateChooser staffModuleStaffDateJoinedDateChooser;
+    private javax.swing.JLabel staffModuleStaffDateJoinedLabel;
+    private javax.swing.JLabel staffModuleStaffDesignationLabel;
+    private javax.swing.JTextField staffModuleStaffDesignationTextField;
+    private javax.swing.JLabel staffModuleStaffIDLabel;
+    private javax.swing.JTextField staffModuleStaffIDTextField;
+    private javax.swing.JLabel staffModuleStaffMobileNoLabel;
+    private javax.swing.JTextField staffModuleStaffMobileNoTextField;
+    private javax.swing.JLabel staffModuleStaffNameLabel;
+    private javax.swing.JTextField staffModuleStaffNameTextField;
+    private javax.swing.JTable staffModuleTable;
     private javax.swing.JLabel timeLabel;
     private javax.swing.JLabel timeTitle;
     private javax.swing.JPanel topPanel;

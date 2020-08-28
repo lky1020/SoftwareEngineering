@@ -164,7 +164,8 @@ public class Login extends javax.swing.JFrame {
         }
         else{
 
-            if(jtfUsername.getText().equals("lky1020") && Arrays.equals(jpfPassword.getPassword(), new char[]{'1', '0', '2', '0'})){
+            if(jtfUsername.getText().equals("lky1020") && Arrays.equals(jpfPassword.getPassword(), new char[]{'1', '0', '2', '0'}) ||
+                    jtfUsername.getText().equals("kuanxian1") || jtfUsername.getText().equals("yong0312") || jtfUsername.getText().equals("YongChenMeow")){
                 
                 invalidUser = 0;
                 
