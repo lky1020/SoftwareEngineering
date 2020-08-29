@@ -29,7 +29,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="patientPaymentScrollPane" pref="561" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="patientPaymentPaymentListLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="patientPaymentPaymentListLabel" min="-2" pref="140" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -77,7 +77,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name=".Heiti J" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Payment List"/>
+        <Property name="text" type="java.lang.String" value="Payment Detail"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
             <MatteColorBorder bottom="1" left="0" right="0" top="0"/>

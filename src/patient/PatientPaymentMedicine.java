@@ -195,7 +195,7 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         }
 
         patientPaymentMedicinePayButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
-        patientPaymentMedicinePayButton.setText("Pay");
+        patientPaymentMedicinePayButton.setText("Next");
         patientPaymentMedicinePayButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 patientPaymentMedicinePayButtonActionPerformed(evt);

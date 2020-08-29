@@ -140,7 +140,7 @@ public class PatientPayment extends javax.swing.JFrame {
         patientPaymentTitleLabel.setText("Payment of ");
 
         patientPaymentPaymentListLabel.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
-        patientPaymentPaymentListLabel.setText("Payment List");
+        patientPaymentPaymentListLabel.setText("Payment Detail");
         patientPaymentPaymentListLabel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         patientPaymentTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -194,7 +194,7 @@ public class PatientPayment extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(patientPaymentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(patientPaymentPaymentListLabel)
+                        .addComponent(patientPaymentPaymentListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
