@@ -3,11 +3,14 @@ package patient;
 
 import main.Home;
 import Class.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class PatientModify extends javax.swing.JFrame {
 
     private PatientValidation validate = new PatientValidation();
+    private List<Patient> patientOnHoldList = new ArrayList<>();
     private Patient oldPatient;
     private Patient patient;
     private String staffName;
@@ -17,7 +20,7 @@ public class PatientModify extends javax.swing.JFrame {
         initComponents();
     }
     
-    public PatientModify(String staffName, Patient patient, javax.swing.JFrame frame) {
+    public PatientModify(String staffName, Patient patient, javax.swing.JFrame frame, List<Patient> patientOnHoldList) {
         initComponents();
         
         this.staffName = staffName;
@@ -26,6 +29,7 @@ public class PatientModify extends javax.swing.JFrame {
         this.patient = patient;
         
         this.frame = frame;
+        this.patientOnHoldList = patientOnHoldList;
         
         //set the background to transparent
         icOldTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -401,7 +405,7 @@ public class PatientModify extends javax.swing.JFrame {
         }
         
         if(modifySuccess){
-            Home home = new Home(staffName, oldPatient, patient);
+            Home home = new Home(staffName, oldPatient, patient, patientOnHoldList);
             home.setVisible(true);
             frame.dispose();
             this.dispose();
@@ -411,7 +415,7 @@ public class PatientModify extends javax.swing.JFrame {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
-        Home home = new Home(staffName);
+        Home home = new Home(staffName, patientOnHoldList);
         home.setVisible(true);
         frame.dispose();
         this.dispose();

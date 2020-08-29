@@ -42,13 +42,14 @@ public class Home extends javax.swing.JFrame {
     public Home (){
         initialize();
     }
+    
     public Home(String staffName) {
         initialize();
         this.staffName = staffName;
         greetLabel.setText(greetLabel.getText() + this.staffName);
     }
     
-    public Home(String staffName, Patient patient, Patient modifyPatient){
+    public Home(String staffName, Patient patient, Patient modifyPatient, List<Patient> patientOnHoldList){
         initialize();
         
         this.staffName = staffName;
@@ -56,6 +57,7 @@ public class Home extends javax.swing.JFrame {
         
         this.patient = patient;
         this.modifyPatient = modifyPatient;
+        this.patientOnHoldList = patientOnHoldList;
         
         for(int i = 0; i < patientList.size(); i++){
             
@@ -71,7 +73,14 @@ public class Home extends javax.swing.JFrame {
         setPatientModelRow(patientList);
         
     }
-
+    
+    public Home(String staffName, List<Patient> patientOnHoldList) {
+        initialize();
+        this.staffName = staffName;
+        greetLabel.setText(greetLabel.getText() + this.staffName);
+        this.patientOnHoldList = patientOnHoldList;
+    }
+    
     public void initialize(){
         initComponents();
         setLocationRelativeTo(null);
@@ -2330,9 +2339,14 @@ public class Home extends javax.swing.JFrame {
             int diagnoseRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Start Diagnose this Patient ? </b> </html>\n" + patientOnHoldList.get(0), "Patient's Record", JOptionPane.YES_NO_CANCEL_OPTION);
             
             if(diagnoseRecord == 0){
-                
                 //Create New Frame
                 onHoldPatient = patientOnHoldList.get(0);
+                patientOnHoldList.remove(0);
+                        
+                PatientDiagnose patientDiagnose = new PatientDiagnose(this.staffName, onHoldPatient, this, this.patientOnHoldList);
+                patientDiagnose.setVisible(true);
+                
+                this.dispose();
                 
             }else if(diagnoseRecord == 1){
                 //Done nothing
@@ -2403,7 +2417,7 @@ public class Home extends javax.swing.JFrame {
             int modifyPatient = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Patient's Record ? </b> </html>\n" + patient, "Patient's Record", JOptionPane.YES_NO_OPTION);
         
             if(modifyPatient == 0){
-                PatientModify patientModify = new PatientModify(this.staffName, patient, this);
+                PatientModify patientModify = new PatientModify(this.staffName, patient, this, this.patientOnHoldList);
                 patientModify.setVisible(true);
                 //this.dispose();
             }
