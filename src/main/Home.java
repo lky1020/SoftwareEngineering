@@ -2525,7 +2525,7 @@ public class Home extends javax.swing.JFrame {
 
                     }else{
 
-                        JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Cancel Patient's Payment", "Cancel Payment", JOptionPane.INFORMATION_MESSAGE);
 
                     }
                 }
