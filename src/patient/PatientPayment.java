@@ -246,7 +246,23 @@ public class PatientPayment extends javax.swing.JFrame {
         
         if(pay >= totalAfterSST){
             
-            JOptionPane.showMessageDialog(null, "Payment Completed & Receipt Generated !!!", "Sufficient Amount", JOptionPane.INFORMATION_MESSAGE);
+            if(pay == totalAfterSST){
+                
+                JOptionPane.showMessageDialog(null, "Payment Completed & Receipt Generated !!!", "Sufficient Amount", JOptionPane.INFORMATION_MESSAGE);
+                
+            }else if(pay >= totalAfterSST){
+                String changeStr = "";
+
+                changeStr += "<html> Change : RM <b>";
+                changeStr += String.format("%05.2f", (pay - totalAfterSST));
+                changeStr += "</b> <br>";
+                changeStr += "Payment Completed & Receipt Generated !!!";
+                changeStr += "</html>";
+                
+                JOptionPane.showMessageDialog(null, changeStr, "Sufficient Amount", JOptionPane.INFORMATION_MESSAGE);
+                changeStr = "";
+            }
+            
             Home home = new Home(staffName, patientOnHoldList);
             home.setVisible(true);
             frame.dispose();
