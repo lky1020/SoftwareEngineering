@@ -457,6 +457,7 @@ public class Home extends javax.swing.JFrame {
         patientsModuleMedicalDescriptionTextArea = new javax.swing.JTextArea();
         patientsModuleDiagnoseButton = new javax.swing.JButton();
         patientsModuleOnHoldButton = new javax.swing.JButton();
+        patientsModulePaymentButton = new javax.swing.JButton();
         appointmentsModule = new javax.swing.JPanel();
         appointmentsModuleScrollPane = new javax.swing.JScrollPane();
         appointmentsModuleTable = new javax.swing.JTable();
@@ -1033,6 +1034,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        patientsModulePaymentButton.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
+        patientsModulePaymentButton.setText("Payment");
+        patientsModulePaymentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                patientsModulePaymentButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout patientsModuleLayout = new javax.swing.GroupLayout(patientsModule);
         patientsModule.setLayout(patientsModuleLayout);
         patientsModuleLayout.setHorizontalGroup(
@@ -1060,7 +1069,7 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(101, Short.MAX_VALUE))
                     .addGroup(patientsModuleLayout.createSequentialGroup()
                         .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(85, 85, 85)
@@ -1072,6 +1081,10 @@ public class Home extends javax.swing.JFrame {
                         .addGap(34, 34, 34))))
             .addGroup(patientsModuleLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(patientsModuleMedicalDescriptionLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(patientsModuleLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(patientsModuleScrollPane)
                     .addComponent(patientsModuleMedicalDescriptionScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1079,12 +1092,10 @@ public class Home extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(patientsModuleOnHoldButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(patientsModuleDiagnoseButton)))
+                        .addComponent(patientsModuleDiagnoseButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(patientsModulePaymentButton)))
                 .addContainerGap())
-            .addGroup(patientsModuleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(patientsModuleMedicalDescriptionLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         patientsModuleLayout.setVerticalGroup(
             patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1110,13 +1121,14 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(patientsModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(patientsModuleMedicalDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(patientsModuleMedicalDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(patientsModuleMedicalDescriptionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addGroup(patientsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(patientsModuleDiagnoseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(patientsModuleOnHoldButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(patientsModuleOnHoldButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patientsModulePaymentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         methodPanel.add(patientsModule, "card2");
@@ -1141,6 +1153,7 @@ public class Home extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        appointmentsModuleTable.setColumnSelectionAllowed(true);
         appointmentsModuleTable.getTableHeader().setReorderingAllowed(false);
         appointmentsModuleTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1157,7 +1170,6 @@ public class Home extends javax.swing.JFrame {
             appointmentsModuleTable.getColumnModel().getColumn(2).setResizable(false);
             appointmentsModuleTable.getColumnModel().getColumn(3).setResizable(false);
             appointmentsModuleTable.getColumnModel().getColumn(4).setResizable(false);
-            appointmentsModuleTable.getColumnModel().getColumn(4).setHeaderValue("Unit Price (RM)");
             appointmentsModuleTable.getColumnModel().getColumn(5).setResizable(false);
         }
 
@@ -2491,6 +2503,41 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_staffModuleDeleteButtonActionPerformed
 
+    private void patientsModulePaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModulePaymentButtonActionPerformed
+        // TODO add your handling code here:
+        if(patient != null){
+
+            for(int i = 0; i < patientList.size(); i++){
+
+                if(patient.getIcNo() == patientList.get(i).getIcNo()){
+
+                    int paymentRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Proceed to Payment ?</b> </html>\n" + patientList.get(i), "Patient's Record Found", JOptionPane.YES_NO_OPTION);
+
+                    if(paymentRecord == 0){
+
+                         //Patients Payment
+                         PatientPaymentMedicine patientPayment = new PatientPaymentMedicine(this.staffName, patientList.get(i), this, this.patientOnHoldList);
+                         patientPayment.setVisible(true);
+                         
+                         this.dispose();
+                
+                this.dispose();
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null, "Cancel Delete Patient's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                }
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No Record Selected !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+        
+        }
+    }//GEN-LAST:event_patientsModulePaymentButtonActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2599,6 +2646,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel patientsModuleNameLabel;
     private javax.swing.JTextField patientsModuleNameTextField;
     private javax.swing.JButton patientsModuleOnHoldButton;
+    private javax.swing.JButton patientsModulePaymentButton;
     private javax.swing.JScrollPane patientsModuleScrollPane;
     private javax.swing.JButton patientsModuleSearchButton;
     private javax.swing.JTable patientsModuleTable;
