@@ -19,11 +19,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import java.util.regex.*;
 import patient.*;
+import staff.staffModify;
 
 public class Home extends javax.swing.JFrame {
 
     private SideBarListener sideBarListener = new SideBarListener();
     private DefaultTableModel patientModel;
+    private DefaultTableModel staffModel;
     private List<Patient> patientList = new ArrayList<>();
     private List<Patient> patientSearchList = new ArrayList<>();
     private List<Patient> patientOnHoldList = new ArrayList<>();
@@ -33,6 +35,11 @@ public class Home extends javax.swing.JFrame {
     private Patient modifyPatient;
     private String patientName; //for medical description label
     private String staffName;//to recrod the staff name
+     private List<Staff> staffList = new ArrayList<>();
+    private List<Staff> staffSearchList = new ArrayList<>();
+     private StaffValidation validate1 = new StaffValidation();
+     private Staff modifyStaff;
+     private Staff staff;
     
     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
     
@@ -79,6 +86,32 @@ public class Home extends javax.swing.JFrame {
         this.staffName = staffName;
         greetLabel.setText(greetLabel.getText() + this.staffName);
         this.patientOnHoldList = patientOnHoldList;
+    }
+    
+
+
+    public Home(String staffName, Staff modifyStaff, Staff staff) {
+     initialize();
+        
+        this.staffName = staffName;
+        greetLabel.setText(greetLabel.getText() + this.staffName);
+        
+        this.staff = staff;
+        this.modifyStaff = modifyStaff;
+
+ 
+        for(int i = 0; i < staffList.size(); i++){
+
+                  if(staff.getId()==(staffList.get(i).getId()) && staff.getName().equals(staffList.get(i).getName()) && staff.getDesignation().equals(staffList.get(i).getDesignation())&& staff.getMobileNo().equals(staffList.get(i).getMobileNo()))
+                {
+                staffList.set(i, this.modifyStaff);
+                
+        }
+        
+        saveStaffDataToFile();
+        JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+        setStaffModel(staffList);
+    }
     }
     
     public void initialize(){
@@ -242,6 +275,114 @@ public class Home extends javax.swing.JFrame {
         for(int i = 0; i < patientList.size(); i++){
 
             if(patientList.get(i).getIc().equals(ic) || patientList.get(i).getMobileNo().equals(mobileNo)){
+                noDuplicate = false;
+            }
+        }
+        
+        return noDuplicate;
+    }
+    
+    private void setStaffModel(List<Staff> arrayList){
+
+        staffModel.setRowCount(0);
+        
+        for(int i = 0; i < arrayList.size(); i++){
+            
+             staffModel.addRow(new Object[]{i + 1, arrayList.get(i).getId(),  arrayList.get(i).getName(),arrayList.get(i).getDesignation(),arrayList.get(i).getMobileNo(), arrayList.get(i).getDateJoined()});
+        
+        }   
+    }
+    
+    private void saveStaffDataToFile(){
+        try {
+            
+            File file = new File("staff.dat");
+            System.out.println("***TRACE SAVE: " + file.getAbsolutePath());
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
+            ooStream.writeObject(staffList);
+            ooStream.close();
+            
+          } catch (FileNotFoundException ex) {
+              
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          } catch (IOException ex) {
+              
+            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          }
+    }
+    
+    private void readstaffDataFromFile(){
+        try {
+            File file = new File("staff.dat");
+            System.out.println("***TRACE READ: " + file.getAbsolutePath());
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(file));
+            staffList = (ArrayList) (oiStream.readObject());
+            oiStream.close();
+
+        } catch (FileNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (IOException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Cannot read from file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (ClassNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Class not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        }
+    }
+    
+     public void clearStaffModuleInputField(){
+        //Clear Input Field
+        staffModuleStaffIDTextField.setText("");
+        staffModuleStaffNameTextField.setText("");
+        staffModuleStaffDesignationTextField.setText("");
+        staffModuleStaffMobileNoTextField.setText("");
+    }
+     
+     public boolean validateID(String id, String action){
+        
+        Pattern pattern = Pattern.compile("\\d{5}");
+        Matcher matcher = pattern.matcher(id);
+        
+        if(action.equals("Delete")){
+            
+            if(matcher.matches()){
+
+                return true;
+
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid ID No, Please Enter Again!!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                return false;
+
+            }
+            
+        }
+        
+        //Search
+        if(matcher.matches() || id.equals("")){
+
+             return true;
+
+        }else{
+            JOptionPane.showMessageDialog(null, "Invalid ID No, Please Enter Again!!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return false;
+
+        }
+
+    }
+     
+     public boolean validateDuplicateStaffList(String id, String mobileNo){
+
+        boolean noDuplicate = true;
+        
+        for(int i = 0; i < staffList.size(); i++){
+
+            if(id.equals(staffList.get(i).getId()) ){
                 noDuplicate = false;
             }
         }
@@ -2484,23 +2625,566 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medicineModuleDeleteButtonActionPerformed
 
     private void staffModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staffModuleTableMouseClicked
-        // TODO add your handling code here:
+          // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) staffModuleTable.getModel();
+        int index = staffModuleTable.getSelectedRow();
+
+        int id = Integer.parseInt(model.getValueAt(index, 1).toString());
+        //String id = model.getValueAt(index, 2).toString();
+        String name = model.getValueAt(index, 2).toString();
+        String designation=model.getValueAt(index,3).toString();
+        
+        //set Medical Description of Patient
+        for(int i = 0; i < staffList.size(); i++){
+            if(staffList.get(i).getId() == id && staffList.get(i).getName().equals(name)){
+                staff = staffList.get(i);
+            }
+        }
     }//GEN-LAST:event_staffModuleTableMouseClicked
 
     private void staffModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleAddButtonActionPerformed
-        // TODO add your handling code here:
+        if(staffModuleStaffIDTextField.getText().equals("") && staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("")&&staffModuleStaffMobileNoTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter ID, Name and Mobile No of Staff !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(staffModuleStaffIDTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Id of staff !!!", "Invalid ID", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(staffModuleStaffNameTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Name of staff !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+            
+        }
+          else if(staffModuleStaffDesignationTextField.getText() .equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter designation of staff !!!", "Designation", JOptionPane.ERROR_MESSAGE);
+        }
+        else if(staffModuleStaffMobileNoTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Mobile No of staff !!!", "Invalid Mobile No", JOptionPane.ERROR_MESSAGE);
+            
+        }
+      
+        else{
+            
+            //validate input
+            if(validate1.validateID(staffModuleStaffIDTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Id Format, Please Enter Again !!! \n Format : xxxxx", "Invalid Id Format", JOptionPane.ERROR_MESSAGE);
+            
+            }
+            else if(validate1.validateName(staffModuleStaffNameTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else if(validate1.validateDesignation(staffModuleStaffDesignationTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Designation Format, Please Enter Again!!! \n Format :xxxxx", "Invalid Designation Format", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else if(validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else if(validateDuplicateStaffList(staffModuleStaffIDTextField.getText(), staffModuleStaffMobileNoTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Staff's Record Already Exist", "Patient's Record Exist", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else{
+                int id = Integer.parseInt(staffModuleStaffIDTextField.getText());
+                Date dateJoined = new Date();
+
+                staff = new Staff(id, staffModuleStaffNameTextField.getText(), staffModuleStaffDesignationTextField.getText(),staffModuleStaffMobileNoTextField.getText(),s.format(dateJoined));
+
+                int addRecords = JOptionPane.showConfirmDialog(null, "<html> <b>Sure to Add This Record ?</b> </html>\n" + staff, "Add Staff's Record", JOptionPane.YES_NO_OPTION);
+
+                if(addRecords == 0){
+
+                    staffList.add(staff);
+                    saveStaffDataToFile();
+                    JOptionPane.showMessageDialog(null, "Staff Records Updated !!!", "Records Updated", JOptionPane.INFORMATION_MESSAGE);
+                    //setStaffModel(staffList);
+
+                }else{
+                    
+                    JOptionPane.showMessageDialog(null, "Cancel Add Staff's Record", "Cancel Adding", JOptionPane.INFORMATION_MESSAGE);
+                
+                }
+                
+                clearStaffModuleInputField();
+            }
+
+        }
     }//GEN-LAST:event_staffModuleAddButtonActionPerformed
 
     private void staffModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleModifyButtonActionPerformed
-        // TODO add your handling code here:
+         // TODO add your handling code here:
+        if(staff != null){
+            
+            int modifyStaff = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Staff's Record ? </b> </html>\n" + staff, "Patient's Record", JOptionPane.YES_NO_OPTION);
+        
+            if(modifyStaff == 0){
+                staffModify staffModify = new staffModify(this.staffName, staff,this);
+                staffModify.setVisible(true);
+                //this.dispose();
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No staff Selected !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            
+        }
+        
     }//GEN-LAST:event_staffModuleModifyButtonActionPerformed
 
     private void staffModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleSearchButtonActionPerformed
-        // TODO add your handling code here:
+         if(!staffModuleStaffIDTextField.getText().equals("") && staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&staffModuleStaffMobileNoTextField.getText().equals("") && staffModuleStaffDateJoinedDateChooser.getDate() == null){
+ 
+            if(validate1.validateID(staffModuleStaffIDTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffIDTextField.getText().equals(staffList.get(i).getId())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx", "Invalid Id Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Name Only
+        else if(staffModuleStaffIDTextField.getText().equals("") && !staffModuleStaffNameTextField.getText().equals("")&&staffModuleStaffDesignationTextField.getText().equals("") &&staffModuleStaffMobileNoTextField.equals("") && staffModuleStaffDateJoinedDateChooser.getDate() == null){
+
+            if(validate1.validateName(staffModuleStaffNameTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffNameTextField.getText().equals(staffList.get(i).getName())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Mobile No Only
+        else if(staffModuleStaffIDTextField.getText().equals("") && staffModuleStaffNameTextField.getText().equals("") &&!staffModuleStaffDesignationTextField.getText().equals("") &&staffModuleStaffMobileNoTextField.getText().equals("") && staffModuleStaffDateJoinedDateChooser.getDate() == null){
+            
+            if(validate1.validateDesignation(staffModuleStaffDesignationTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffDesignationTextField.getText().equals(staffList.get(i).getDesignation())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+else if(staffModuleStaffIDTextField.getText().equals("") && staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&!staffModuleStaffMobileNoTextField.getText().equals("") && staffModuleStaffDateJoinedDateChooser.getDate() == null){
+            
+            if(validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffMobileNoTextField.getText().equals(staffList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Date Created Only
+      else if(staffModuleStaffIDTextField.getText().equals("") && staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&staffModuleStaffMobileNoTextField.getText().equals("") && ! (staffModuleStaffDateJoinedDateChooser.getDate() == null)){
+            
+            
+            if(validate1.validateDateJoined(s.format(staffModuleStaffDateJoinedDateChooser.getDate()))){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(s.format(staffModuleStaffDateJoinedDateChooser.getDate()).equals(staffList.get(i).getDateJoined())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Date Created Format, Please Enter Again!!! \n Format : dd-MM-yyyy", "Invalid Date Created Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //IC, Name, Mobile No
+        else if(!staffModuleStaffIDTextField.getText().equals("") &&!staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&staffModuleStaffMobileNoTextField.getText().equals("") &&staffModuleStaffDateJoinedDateChooser.getDate() == null){
+            
+            if(validate1.validateID(staffModuleStaffIDTextField.getText()) && validate1.validateName(staffModuleStaffNameTextField.getText()) && validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffIDTextField.getText().equals(staffList.get(i).getId()) && staffModuleStaffNameTextField.getText().equals(staffList.get(i).getName()) && staffModuleStaffMobileNoTextField.getText().equals(staffList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the patientSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate1.validateID(staffModuleStaffIDTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid ID Format, Please Enter Again !!! \n Format : xxxxxx", "Invalid ID Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateName(staffModuleStaffNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+            }
+        }
+        //ID, Name, Mobile No, Date Joined
+       else if(!staffModuleStaffIDTextField.getText().equals("") &&!staffModuleStaffNameTextField.getText().equals("") &&!staffModuleStaffDesignationTextField.getText().equals("") &&!staffModuleStaffMobileNoTextField.getText().equals("") &&!(staffModuleStaffDateJoinedDateChooser.getDate() == null)){
+            
+            if(validate1.validateID(staffModuleStaffIDTextField.getText()) && validate1.validateName(staffModuleStaffNameTextField.getText())&& validate1.validateDesignation(staffModuleStaffDesignationTextField.getText()) && validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText()) && validate1.validateDateJoined(s.format(staffModuleStaffDateJoinedDateChooser.getDate()))){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffIDTextField.getText().equals(staffList.get(i).getId()) && staffModuleStaffNameTextField.getText().equals(staffList.get(i).getName()) && staffModuleStaffDesignationTextField.getText().equals(staffList.get(i).getDesignation())&& staffModuleStaffMobileNoTextField.getText().equals(staffList.get(i).getMobileNo()) && s.format(staffModuleStaffDateJoinedDateChooser.getDate()).equals(staffList.get(i).getDateJoined())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate1.validateID(staffModuleStaffIDTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid ID Format, Please Enter Again !!! \n Format : xxxxxx", "Invalid ID Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateName(staffModuleStaffNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+		if(validate1.validateDesignation(staffModuleStaffDesignationTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Designation Format, Please Enter Again!!! \n Format : xxxxx", "Invalid Designation Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1. validateDateJoined(s.format(staffModuleStaffDateJoinedDateChooser.getDate())) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Date Created Format, Please Enter Again!!! \n Format : dd-MM-yyyy", "Invalid Date Created Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        //IC, Name
+    else if(!staffModuleStaffIDTextField.getText().equals("") &&!staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&staffModuleStaffMobileNoTextField.getText().equals("") &&staffModuleStaffDateJoinedDateChooser.getDate() == null){
+              
+            if(validate1.validateID(staffModuleStaffIDTextField.getText()) && validate1.validateName(staffModuleStaffNameTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffIDTextField.getText().equals(staffList.get(i).getId()) && staffModuleStaffNameTextField.getText().equals(staffList.get(i).getName())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate1.validateID(staffModuleStaffIDTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Id Format, Please Enter Again !!! \n Format : xxxxxx", "Invalid Id Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateName(staffModuleStaffNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+
+            }
+        }
+        //IC, Mobile No
+ 	 else if(!staffModuleStaffIDTextField.getText().equals("") &&staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&!staffModuleStaffMobileNoTextField.getText().equals("") &&staffModuleStaffDateJoinedDateChooser.getDate() == null){
+             
+            if(validate1.validateID(staffModuleStaffIDTextField.getText()) && validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffIDTextField.getText().equals(staffList.get(i).getId()) && staffModuleStaffMobileNoTextField.getText().equals(staffList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate1.validateID(staffModuleStaffIDTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Id Format, Please Enter Again !!! \n Format : xxxxxx", "Invalid Id Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        //Name, Mobile No
+            else if(staffModuleStaffIDTextField.getText().equals("") &&!staffModuleStaffNameTextField.getText().equals("") &&staffModuleStaffDesignationTextField.getText().equals("") &&!staffModuleStaffMobileNoTextField.getText().equals("") &&!(staffModuleStaffDateJoinedDateChooser.getDate() == null)){
+            
+            if(validate1.validateName(staffModuleStaffNameTextField.getText()) && validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(staffModuleStaffNameTextField.getText().equals(staffList.get(i).getName()) && staffModuleStaffMobileNoTextField.getText().equals(staffList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the patientSearchList's record
+                staffSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate1.validateName(staffModuleStaffNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate1.validateMobileNo(staffModuleStaffMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        else{
+
+            String id = JOptionPane.showInputDialog("Please Enter id to Search Records (Empty to Search All): ");
+
+            
+            if(id == null || id.equals("")){
+
+                setStaffModel(staffList);
+
+            }else /*if(validateID(Id, "search"))*/{
+
+                boolean recordFound = false;
+
+                for(int i = 0; i < staffList.size(); i++){
+
+                    if(Integer.parseInt(id) == staffList.get(i).getId()){
+                        recordFound = true;
+
+                        //Add to the staffSearchList for display purpose
+                        staffSearchList.add(staffList.get(i));
+                        
+                    }
+                }
+
+                setStaffModel(staffSearchList);
+                //clear all the staffSearchList's record
+               staffSearchList.clear();
+
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        
+        
+    }   
     }//GEN-LAST:event_staffModuleSearchButtonActionPerformed
 
     private void staffModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleDeleteButtonActionPerformed
         // TODO add your handling code here:
+          if(staff != null){
+
+            for(int i = 0; i < staffList.size(); i++){
+
+                if(staff.getId() == staffList.get(i).getId()){
+
+                    int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + staffList.get(i), "Staff's Record Found", JOptionPane.YES_NO_OPTION);
+
+                    if(deleteRecord == 0){
+
+                         staffList.remove(staffList.get(i));
+                           saveStaffDataToFile();
+                            JOptionPane.showMessageDialog(null, "Staff Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                            setStaffModel(staffList);
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null, "Cancel Delete Staff's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                }
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No Record Selected !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+        
+        }
     }//GEN-LAST:event_staffModuleDeleteButtonActionPerformed
 
     private void patientsModulePaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_patientsModulePaymentButtonActionPerformed
