@@ -47,13 +47,13 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         medicineGivenModel = (DefaultTableModel)patientPaymentMedicineMedicineGivenTable.getModel();
         
         //Hardcode medicine available
-        Medicine medicine1 = new Medicine(1001, "Panadol", 50, 10.00, "07-07-2023");
+        Medicine medicine1 = new Medicine("1001", "Panadol", 50, 10.00, "07-07-2023");
         medicineAvailableList.add(medicine1);
-        Medicine medicine2 = new Medicine(1002, "Cough", 50, 12.00, "07-07-2021");
+        Medicine medicine2 = new Medicine("1002", "Cough", 50, 12.00, "07-07-2021");
         medicineAvailableList.add(medicine2);
-        Medicine medicine3 = new Medicine(1003, "Fewer", 50, 7.00, "21-06-2021");
+        Medicine medicine3 = new Medicine("1003", "Fewer", 50, 7.00, "21-06-2021");
         medicineAvailableList.add(medicine3);
-        Medicine medicine4 = new Medicine(1004, "Sick", 50, 20.00, "20-11-2022");
+        Medicine medicine4 = new Medicine("1004", "Sick", 50, 20.00, "20-11-2022");
         medicineAvailableList.add(medicine4);
         
         setMedicineAvailableModelRow(medicineAvailableList);
@@ -315,7 +315,7 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         
         //Assign the medicine from medicineAvailableList
         for(int i = 0; i < medicineAvailableList.size(); i++){
-            if(medicineAvailableList.get(i).getId() == id && medicineAvailableList.get(i).getMedicineName().equals(name) && medicineAvailableList.get(i).getUnitPrice() == unitPrice){
+            if(Integer.parseInt(medicineAvailableList.get(i).getId()) == id && medicineAvailableList.get(i).getMedicineName().equals(name) && medicineAvailableList.get(i).getUnitPrice() == unitPrice){
                 medicine = medicineAvailableList.get(i);
             }
         }
@@ -332,7 +332,7 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         
         //Assign the medicine from medicineAvailableList
         for(int i = 0; i < medicineGivenList.size(); i++){
-            if(medicineGivenList.get(i).getId() == id && medicineGivenList.get(i).getMedicineName().equals(name) && medicineGivenList.get(i).getUnitPrice() == unitPrice){
+            if(Integer.parseInt(medicineGivenList.get(i).getId()) == id && medicineGivenList.get(i).getMedicineName().equals(name) && medicineGivenList.get(i).getUnitPrice() == unitPrice){
                 medicineRemove = medicineGivenList.get(i);
             }
         }

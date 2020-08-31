@@ -52,7 +52,7 @@ public class PatientPayment extends javax.swing.JFrame {
         this.patientPaymentTitleLabel.setText(this.patientPaymentTitleLabel.getText() + this.patient.getName());
         
         //add consultation fee
-        medicinePaymentList.add(new Medicine(0, "Consultation Fee", 1, 10.00, ""));
+        medicinePaymentList.add(new Medicine("0", "Consultation Fee", 1, 10.00, ""));
         
         //Set table model
         medicinePaymentModel = (DefaultTableModel)patientPaymentTable.getModel();
@@ -64,16 +64,16 @@ public class PatientPayment extends javax.swing.JFrame {
             
         }
         
-        medicinePaymentList.add(new Medicine(0, "Total Before SST", 1, totalBeforeSST, ""));
-        medicinePaymentList.add(new Medicine(0, "", 0, 0, ""));
+        medicinePaymentList.add(new Medicine("0", "Total Before SST", 1, totalBeforeSST, ""));
+        medicinePaymentList.add(new Medicine("0", "", 0, 0, ""));
         
         //calculate sst
         sst = totalBeforeSST * 0.06;
         totalAfterSST = totalBeforeSST + sst;
         
         //add sst and totalAfterSST to the medicinePaymentList
-        medicinePaymentList.add(new Medicine(0, "6% SST", 1, sst, ""));
-        medicinePaymentList.add(new Medicine(0, "Total After SST", 1, totalAfterSST, ""));
+        medicinePaymentList.add(new Medicine("0", "6% SST", 1, sst, ""));
+        medicinePaymentList.add(new Medicine("0", "Total After SST", 1, totalAfterSST, ""));
 
         setMedicinePaymentModelRow(medicinePaymentList);
     }
@@ -87,7 +87,7 @@ public class PatientPayment extends javax.swing.JFrame {
         
         for(int i = 0; i < medicinePaymentList.size(); i++){
             
-            if(medicinePaymentList.get(i).getId() == 0){
+            if(medicinePaymentList.get(i).getId().equals(0)){
                 if(medicinePaymentList.get(i).getMedicineName().equals("Total Before SST") || medicinePaymentList.get(i).getMedicineName().equals("Total After SST") && medicinePaymentList.get(i).getUnitPrice() != 0){
                     nameStr += "<html> <b>";
                     nameStr += medicinePaymentList.get(i).getMedicineName();
