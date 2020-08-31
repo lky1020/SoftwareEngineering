@@ -6,8 +6,6 @@
 package medicine;
 
 import Class.Medicine;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 import main.Home;
 

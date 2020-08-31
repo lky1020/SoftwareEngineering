@@ -2807,8 +2807,8 @@ public class Home extends javax.swing.JFrame {
             int modifyMedicine = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Medicine's Record ? </b> </html>\n" + medicine, "Medicine's Record", JOptionPane.YES_NO_OPTION);
         
             if(modifyMedicine == 0){
-                MedicineModify medModify = new MedicineModify(this.staffName, medicine, this);
-                medModify.setVisible(true);
+                //MedicineModify medModify = new MedicineModify(this.staffName, medicine, this);
+                //medModify.setVisible(true);
                 //this.dispose();
             }
             
