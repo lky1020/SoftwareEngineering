@@ -8,26 +8,23 @@ package medicine;
 import Class.Medicine;
 import javax.swing.JOptionPane;
 import main.Home;
-
 /**
  *
  * @author KXian
  */
-public class MedicineModify extends javax.swing.JPanel {
-
+public class ModifyMedicine extends javax.swing.JFrame {
     private Medicine oldMedicine;
     private Medicine medicine;
     private String staffName;
     private javax.swing.JFrame frame;
-    
     /**
-     * Creates new form MedicineModify
+     * Creates new form ModifyMedicine
      */
-    public MedicineModify() {
+    public ModifyMedicine() {
         initComponents();
     }
     
-    public MedicineModify(String staffName, Medicine medicine, javax.swing.JFrame frame){
+    public ModifyMedicine(String staffName, Medicine medicine, javax.swing.JFrame frame){
         initComponents();
         
         this.staffName = staffName;
@@ -50,7 +47,6 @@ public class MedicineModify extends javax.swing.JPanel {
         oldQuantityTextField.setText(Integer.toString(medicine.getQuantity()));
         oldUnitPriceTextField.setText(Double.toString(medicine.getUnitPrice()));
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,22 +56,23 @@ public class MedicineModify extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         modifyTitleLabel = new javax.swing.JLabel();
         medicineNameLabel = new javax.swing.JLabel();
+        oldNameTextField = new javax.swing.JTextField();
         quantityLabel = new javax.swing.JLabel();
         unitPriceLabel = new javax.swing.JLabel();
-        modifyBtn = new javax.swing.JButton();
+        oldQuantityTextField = new javax.swing.JTextField();
+        oldUnitPriceTextField = new javax.swing.JTextField();
         newNameTextField = new javax.swing.JTextField();
         quantityTextField = new javax.swing.JTextField();
         unitPriceTextField = new javax.swing.JTextField();
-        oldNameTextField = new javax.swing.JTextField();
-        oldQuantityTextField = new javax.swing.JTextField();
-        oldUnitPriceTextField = new javax.swing.JTextField();
         icArrowLabel = new javax.swing.JLabel();
         icArrowLabel1 = new javax.swing.JLabel();
         icArrowLabel2 = new javax.swing.JLabel();
+        modifyBtn = new javax.swing.JButton();
         cancelBtn1 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         modifyTitleLabel.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         modifyTitleLabel.setText("Please Enter New Info For Modification");
@@ -83,21 +80,13 @@ public class MedicineModify extends javax.swing.JPanel {
         medicineNameLabel.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         medicineNameLabel.setText("Medicine Name : ");
 
+        oldNameTextField.setEditable(false);
+
         quantityLabel.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         quantityLabel.setText("Quantity : ");
 
         unitPriceLabel.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         unitPriceLabel.setText("Unit Price (RM) : ");
-
-        modifyBtn.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
-        modifyBtn.setText("Modify");
-        modifyBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modifyBtnActionPerformed(evt);
-            }
-        });
-
-        oldNameTextField.setEditable(false);
 
         oldQuantityTextField.setEditable(false);
 
@@ -109,6 +98,14 @@ public class MedicineModify extends javax.swing.JPanel {
 
         icArrowLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/arrowRight.png"))); // NOI18N
 
+        modifyBtn.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        modifyBtn.setText("Modify");
+        modifyBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifyBtnActionPerformed(evt);
+            }
+        });
+
         cancelBtn1.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
         cancelBtn1.setText("Cancel");
         cancelBtn1.addActionListener(new java.awt.event.ActionListener() {
@@ -117,173 +114,153 @@ public class MedicineModify extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(unitPriceLabel)
-                    .addComponent(medicineNameLabel)
-                    .addComponent(quantityLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(modifyTitleLabel)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(69, 69, 69)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(oldUnitPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                            .addComponent(oldQuantityTextField))
-                                        .addGap(12, 12, 12)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(icArrowLabel1)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(icArrowLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(unitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(oldNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(icArrowLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(newNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addGap(83, 83, 83))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(modifyBtn)
-                        .addGap(122, 122, 122))))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(411, Short.MAX_VALUE)
-                    .addComponent(cancelBtn1)
-                    .addGap(29, 29, 29)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(modifyTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(medicineNameLabel)
-                        .addComponent(oldNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(icArrowLabel)
-                    .addComponent(newNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(quantityLabel)
-                        .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(oldQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(icArrowLabel1))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(unitPriceLabel)
-                        .addComponent(unitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(oldUnitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(icArrowLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                .addComponent(modifyBtn)
-                .addGap(21, 21, 21))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(326, Short.MAX_VALUE)
-                    .addComponent(cancelBtn1)
-                    .addGap(21, 21, 21)))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(unitPriceLabel)
+                    .addComponent(quantityLabel)
+                    .addComponent(medicineNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(oldNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(oldQuantityTextField)
+                    .addComponent(oldUnitPriceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(icArrowLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(unitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(icArrowLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(newNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(icArrowLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(90, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(modifyBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(cancelBtn1)
+                        .addGap(38, 38, 38))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(modifyTitleLabel)
+                        .addGap(76, 76, 76))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(modifyTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(medicineNameLabel)
+                        .addComponent(oldNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(icArrowLabel1)
+                    .addComponent(newNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(quantityLabel)
+                        .addComponent(oldQuantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(icArrowLabel)
+                    .addComponent(quantityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(unitPriceLabel)
+                        .addComponent(oldUnitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(icArrowLabel2)
+                    .addComponent(unitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modifyBtn)
+                    .addComponent(cancelBtn1))
+                .addGap(19, 19, 19))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void modifyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyBtnActionPerformed
         // TODO add your handling code here:
-        boolean modifySuccess = false;
         
+        boolean modifySuccess = false;
+
         //Medicine Name Only
         if(!newNameTextField.getText().equals("") && quantityTextField.getText().equals("") && unitPriceTextField.getText().equals("")){
-                String name = newNameTextField.getText();
-                
-                medicine.setMedicineName(name);
-                
-                modifySuccess = true;
+            String name = newNameTextField.getText();
+
+            medicine.setMedicineName(name);
+
+            modifySuccess = true;
         }
         //Quantity Only
         else if(newNameTextField.getText().equals("") && !quantityTextField.getText().equals("") && unitPriceTextField.getText().equals("")){
-            
+
             if(Integer.parseInt(quantityTextField.getText()) >= 0){
-                
+
                 medicine.setQuantity(Integer.parseInt(quantityTextField.getText()));
-                
+
                 modifySuccess = true;
-                
+
             }else{
-                
+
                 JOptionPane.showMessageDialog(null, "Invalid Quantity, Please Enter Again !!!", "Invalid Quantity", JOptionPane.ERROR_MESSAGE);
-            
+
             }
         }
         //Unit Price Only
         else if(newNameTextField.getText().equals("") && quantityTextField.getText().equals("") && !unitPriceTextField.getText().equals("")){
-            
+
             if(Double.parseDouble(unitPriceTextField.getText()) > 0){
-                
+
                 medicine.setUnitPrice(Double.parseDouble(unitPriceTextField.getText()));
-                
+
                 modifySuccess = true;
-                
+
             }else{
-                
+
                 JOptionPane.showMessageDialog(null, "Invalid Unit Price, Please Enter Again!!!", "Invalid Unit Price", JOptionPane.ERROR_MESSAGE);
-                
+
             }
         }
         //Name, Quantity
         else if(!newNameTextField.getText().equals("") && !quantityTextField.getText().equals("") && unitPriceTextField.getText().equals("")){
-            
+
             if(Integer.parseInt(quantityTextField.getText()) >= 0){
                 String name = newNameTextField.getText();
-                
+
                 medicine.setMedicineName(name);
                 medicine.setQuantity(Integer.parseInt(quantityTextField.getText()));
-                
+
                 modifySuccess = true;
-                
+
             }else{
                 JOptionPane.showMessageDialog(null, "Invalid Quantity, Please Enter Again !!!", "Invalid Quantity", JOptionPane.ERROR_MESSAGE);
             }
         }
         //Name, Unit Price
         else if(!newNameTextField.getText().equals("") && quantityTextField.getText().equals("") && !unitPriceTextField.getText().equals("")){
-            
+
             if(Double.parseDouble(unitPriceTextField.getText()) > 0){
                 String name = newNameTextField.getText();
-                
+
                 medicine.setMedicineName(name);
                 medicine.setUnitPrice(Double.parseDouble(unitPriceTextField.getText()));
-                
+
                 modifySuccess = true;
-                
+
             }
             else{
                 JOptionPane.showMessageDialog(null, "Invalid Unit Price, Please Enter Again!!!", "Invalid Unit Price", JOptionPane.ERROR_MESSAGE);
@@ -291,65 +268,65 @@ public class MedicineModify extends javax.swing.JPanel {
         }
         //Quantity, Unit Price
         else if(newNameTextField.getText().equals("") && !quantityTextField.getText().equals("") && !unitPriceTextField.getText().equals("")){
-            
+
             if(Double.parseDouble(unitPriceTextField.getText()) > 0 && Integer.parseInt(quantityTextField.getText()) >= 0){
-                
+
                 medicine.setUnitPrice(Double.parseDouble(unitPriceTextField.getText()));
                 medicine.setQuantity(Integer.parseInt(quantityTextField.getText()));
-                
+
                 modifySuccess = true;
-                
+
             }else{
-                
+
                 if(Double.parseDouble(unitPriceTextField.getText()) <= 0){
-                    
+
                     JOptionPane.showMessageDialog(null, "Invalid Unit Price, Please Enter Again!!!", "Invalid Unit Price", JOptionPane.ERROR_MESSAGE);
-                    
+
                 }
-                
+
                 if(Integer.parseInt(quantityTextField.getText()) < 0){
-                    
+
                     JOptionPane.showMessageDialog(null, "Invalid Quantity, Please Enter Again !!!", "Invalid Quantity", JOptionPane.ERROR_MESSAGE);
-                    
+
                 }
-                
+
             }
         }
         //Name, Quantity, Unit Price
         else if(!newNameTextField.getText().equals("") && !quantityTextField.getText().equals("") && !unitPriceTextField.getText().equals("")){
-            
+
             if(Double.parseDouble(unitPriceTextField.getText()) > 0 && Integer.parseInt(quantityTextField.getText()) >= 0){
                 String name = newNameTextField.getText();
-                
+
                 medicine.setMedicineName(name);
                 medicine.setUnitPrice(Double.parseDouble(unitPriceTextField.getText()));
                 medicine.setQuantity(Integer.parseInt(quantityTextField.getText()));
-                
+
                 modifySuccess = true;
-                
+
             }else{
-                
+
                 if(Double.parseDouble(unitPriceTextField.getText()) <= 0){
-                    
+
                     JOptionPane.showMessageDialog(null, "Invalid Unit Price, Please Enter Again!!!", "Invalid Unit Price", JOptionPane.ERROR_MESSAGE);
-                    
+
                 }
-                
+
                 if(Integer.parseInt(quantityTextField.getText()) < 0){
-                    
+
                     JOptionPane.showMessageDialog(null, "Invalid Quantity, Please Enter Again !!!", "Invalid Quantity", JOptionPane.ERROR_MESSAGE);
-                    
+
                 }
-                
+
             }
         }
         //No Input
         else if(newNameTextField.getText().equals("") && quantityTextField.getText().equals("") && unitPriceTextField.getText().equals("")){
-            
+
             JOptionPane.showMessageDialog(null, "Please Enter Name / Quantity / Unit Price of Medicine to modify !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-            
+
         }
-        
+
         if(modifySuccess){
             Home home = new Home(staffName, oldMedicine, medicine);
             home.setVisible(true);
@@ -365,12 +342,46 @@ public class MedicineModify extends javax.swing.JPanel {
         //this.dispose();
     }//GEN-LAST:event_cancelBtn1ActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ModifyMedicine.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ModifyMedicine.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ModifyMedicine.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ModifyMedicine.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ModifyMedicine().setVisible(true);
+            }
+        });
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBtn1;
     private javax.swing.JLabel icArrowLabel;
     private javax.swing.JLabel icArrowLabel1;
     private javax.swing.JLabel icArrowLabel2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel medicineNameLabel;
     private javax.swing.JButton modifyBtn;
     private javax.swing.JLabel modifyTitleLabel;
