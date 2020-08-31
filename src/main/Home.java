@@ -19,6 +19,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import java.util.regex.*;
 import patient.*;
+import medicine.*;
 import staff.staffModify;
 
 public class Home extends javax.swing.JFrame {
@@ -43,6 +44,7 @@ public class Home extends javax.swing.JFrame {
     private Staff staff;
     
     private Medicine medicine;
+    private Medicine modifyMedicine;
     private MedicineValidation mValidate = new MedicineValidation();
     private List<Medicine> medicineList = new ArrayList<>();
     
@@ -93,7 +95,28 @@ public class Home extends javax.swing.JFrame {
         this.patientOnHoldList = patientOnHoldList;
     }
     
-
+    public Home(String staffName, Medicine medicine, Medicine modifyMedicine){
+        initialize();
+        
+        this.staffName = staffName;
+        greetLabel.setText(greetLabel.getText() + this.staffName);
+        
+        this.medicine = medicine;
+        this.modifyMedicine = modifyMedicine;
+        
+        for(int i = 0; i < medicineList.size(); i++){
+            
+            if(medicine.getId().equals(medicineList.get(i).getId())){
+                
+                medicineList.set(i, this.modifyMedicine);
+                
+            }
+        }
+        
+        saveMedicineDataToFile();
+        JOptionPane.showMessageDialog(null, "Medicine Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+        setMedicineModelRow(medicineList);
+    }
 
     public Home(String staffName, Staff modifyStaff, Staff staff) {
      initialize();
@@ -349,6 +372,20 @@ public class Home extends javax.swing.JFrame {
         for(int i = 0; i < patientList.size(); i++){
 
             if(patientList.get(i).getIc().equals(ic) || patientList.get(i).getMobileNo().equals(mobileNo)){
+                noDuplicate = false;
+            }
+        }
+        
+        return noDuplicate;
+    }
+    
+    public boolean validateDuplicateMedicineList(String id){
+
+        boolean noDuplicate = true;
+        
+        for(int i = 0; i < medicineList.size(); i++){
+
+            if(medicineList.get(i).getId().equals(id)){
                 noDuplicate = false;
             }
         }
@@ -2679,7 +2716,18 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_appointmentsModuleDeleteButtonActionPerformed
 
     private void medicineModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicineModuleTableMouseClicked
-        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) medicineModuleTable.getModel();
+        int index = medicineModuleTable.getSelectedRow();
+
+        String id = model.getValueAt(index, 1).toString();
+        String name = model.getValueAt(index, 2).toString();
+        
+        //set Medical Description of Patient
+        for(int i = 0; i < medicineList.size(); i++){
+            if(medicineList.get(i).getId().equals(id) && medicineList.get(i).getMedicineName().equals(name)){
+                medicine = medicineList.get(i);
+            }
+        }
     }//GEN-LAST:event_medicineModuleTableMouseClicked
 
     private void medicineModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleAddButtonActionPerformed
@@ -2712,6 +2760,11 @@ public class Home extends javax.swing.JFrame {
         else if(medicineModuleMedicineExpiredDateDateChooser.getDate() == null){
             
             JOptionPane.showMessageDialog(null, "Please Enter Expired Date !!!", "Invalid Expired Date", JOptionPane.ERROR_MESSAGE);
+        }
+        else if(validateDuplicateMedicineList(medicineModuleMedicineIDTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Medicine's Record Already Exist", "Medicine's Record Exist", JOptionPane.ERROR_MESSAGE);
+                
         }
         else{
             //validate input
@@ -2749,6 +2802,21 @@ public class Home extends javax.swing.JFrame {
 
     private void medicineModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleModifyButtonActionPerformed
         // TODO add your handling code here:
+        if(medicine != null){
+            
+            int modifyMedicine = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Medicine's Record ? </b> </html>\n" + medicine, "Medicine's Record", JOptionPane.YES_NO_OPTION);
+        
+            if(modifyMedicine == 0){
+                MedicineModify medModify = new MedicineModify(this.staffName, medicine, this);
+                medModify.setVisible(true);
+                //this.dispose();
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No Medicine Selected !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+            
+        }
     }//GEN-LAST:event_medicineModuleModifyButtonActionPerformed
 
     private void medicineModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleSearchButtonActionPerformed
@@ -2756,7 +2824,34 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medicineModuleSearchButtonActionPerformed
 
     private void medicineModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleDeleteButtonActionPerformed
-        // TODO add your handling code here:
+        if(medicine != null){
+
+            for(int i = 0; i < medicineList.size(); i++){
+
+                if(medicine.getId().equals(medicineList.get(i).getId())){
+
+                    int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + medicineList.get(i), "MEdicine's Record Found", JOptionPane.YES_NO_OPTION);
+
+                    if(deleteRecord == 0){
+
+                         medicineList.remove(medicineList.get(i));
+                           saveMedicineDataToFile();
+                            JOptionPane.showMessageDialog(null, "Medicine Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                            setMedicineModelRow(medicineList);
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null, "Cancel Delete Medicine's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                }
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No Record Selected !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+        
+        }
     }//GEN-LAST:event_medicineModuleDeleteButtonActionPerformed
 
     private void staffModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staffModuleTableMouseClicked
