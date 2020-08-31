@@ -26,6 +26,7 @@ public class Home extends javax.swing.JFrame {
     private SideBarListener sideBarListener = new SideBarListener();
     private DefaultTableModel patientModel;
     private DefaultTableModel staffModel;
+    private DefaultTableModel medicineModel;
     private List<Patient> patientList = new ArrayList<>();
     private List<Patient> patientSearchList = new ArrayList<>();
     private List<Patient> patientOnHoldList = new ArrayList<>();
@@ -35,11 +36,15 @@ public class Home extends javax.swing.JFrame {
     private Patient modifyPatient;
     private String patientName; //for medical description label
     private String staffName;//to recrod the staff name
-     private List<Staff> staffList = new ArrayList<>();
+    private List<Staff> staffList = new ArrayList<>();
     private List<Staff> staffSearchList = new ArrayList<>();
-     private StaffValidation validate1 = new StaffValidation();
-     private Staff modifyStaff;
-     private Staff staff;
+    private StaffValidation validate1 = new StaffValidation();
+    private Staff modifyStaff;
+    private Staff staff;
+    
+    private Medicine medicine;
+    private MedicineValidation mValidate = new MedicineValidation();
+    private List<Medicine> medicineList = new ArrayList<>();
     
     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
     
@@ -152,6 +157,13 @@ public class Home extends javax.swing.JFrame {
         medicineModuleMedicineQuantityTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         medicineModuleMedicineUnitPriceTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         
+        medicineModuleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //read and show Medicine Records
+        readMedicineDataFromFile();
+        medicineModel = (DefaultTableModel)medicineModuleTable.getModel();
+        setMedicineModelRow(medicineList);
+        
         //Staff Module
         //set the background to transparent
         staffModuleStaffIDTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
@@ -234,6 +246,68 @@ public class Home extends javax.swing.JFrame {
         patientsModuleNameTextField.setText("");
         patientsModuleMobileNoTextField.setText("");
         patientsModuleDateCreatedDateChooser.setCalendar(null);
+    }
+    
+    private void setMedicineModelRow(List<Medicine> arrayList){
+
+        medicineModel.setRowCount(0);
+        
+        for(int i = 0; i < arrayList.size(); i++){
+            medicineModel.addRow(new Object[]{i + 1, arrayList.get(i).getId(), arrayList.get(i).getMedicineName(), arrayList.get(i).getQuantity(), arrayList.get(i).getUnitPrice(), arrayList.get(i).getExpiredDate()});
+        
+        }   
+    }
+    
+    private void saveMedicineDataToFile(){
+        try {
+            
+            File file = new File("medicine.dat");
+            System.out.println("***TRACE SAVE: " + file.getAbsolutePath());
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
+            ooStream.writeObject(medicineList);
+            ooStream.close();
+            
+          } catch (FileNotFoundException ex) {
+              
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          } catch (IOException ex) {
+              
+            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          }
+    }
+    
+    private void readMedicineDataFromFile(){
+        try {
+            File file = new File("medicine.dat");
+            System.out.println("***TRACE READ: " + file.getAbsolutePath());
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(file));
+            medicineList = (ArrayList) (oiStream.readObject());
+            oiStream.close();
+
+        } catch (FileNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (IOException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Cannot read from file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (ClassNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Class not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        }
+    }
+    
+    public void clearMedicineModuleInputField(){
+        //Clear Input Field
+        medicineModuleMedicineIDTextField.setText("");
+        medicineModuleMedicineNameTextField.setText("");
+        medicineModuleMedicineQuantityTextField.setText("");
+        medicineModuleMedicineUnitPriceTextField.setText("");
+        medicineModuleMedicineExpiredDateDateChooser.setCalendar(null);
     }
     
     public boolean validateIcNo(String icNo, String action){
@@ -2609,7 +2683,68 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medicineModuleTableMouseClicked
 
     private void medicineModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleAddButtonActionPerformed
-        // TODO add your handling code here:
+        if(medicineModuleMedicineIDTextField.getText().equals("") && medicineModuleMedicineNameTextField.getText().equals("") &&
+            medicineModuleMedicineQuantityTextField.getText().equals("") && medicineModuleMedicineUnitPriceTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Medicine ID, Name, Quantity and Unit Price !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(medicineModuleMedicineIDTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Medicine ID !!!", "Invalid Medicine ID", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(medicineModuleMedicineNameTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Medicine Name !!!", "Invalid Medicine Name", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(medicineModuleMedicineQuantityTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Quantity of Medicine !!!", "Invalid Quantity", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(medicineModuleMedicineUnitPriceTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Unit Price of Medicine !!!", "Invalid Unit Price", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(medicineModuleMedicineExpiredDateDateChooser.getDate() == null){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Expired Date !!!", "Invalid Expired Date", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            //validate input
+            if(mValidate.validateMedicineID(medicineModuleMedicineIDTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid ID Format, Please Enter Again !!! \n Format : xxxx \n E.g : 0001", "Invalid ID Format", JOptionPane.ERROR_MESSAGE);
+            
+            }
+            else{
+                int quantity = Integer.parseInt(medicineModuleMedicineQuantityTextField.getText());
+                double unitPrice = Double.parseDouble(medicineModuleMedicineUnitPriceTextField.getText());
+                
+                medicine = new Medicine(medicineModuleMedicineIDTextField.getText(), medicineModuleMedicineNameTextField.getText(), quantity, unitPrice, s.format(medicineModuleMedicineExpiredDateDateChooser.getDate()));
+
+                int addRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Sure to Add This Record ?</b> </html>\n" + medicine, "Add Medicine's Record", JOptionPane.YES_NO_OPTION);
+
+                if(addRecord == 0){
+
+                    medicineList.add(medicine);
+                    saveMedicineDataToFile();
+                    JOptionPane.showMessageDialog(null, "Medicine Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                    setMedicineModelRow(medicineList);
+
+                }else{
+                    
+                    JOptionPane.showMessageDialog(null, "Cancel Add Medicine's Record", "Cancel Adding", JOptionPane.INFORMATION_MESSAGE);
+                
+                }
+                
+                clearMedicineModuleInputField();
+            }
+
+        }
     }//GEN-LAST:event_medicineModuleAddButtonActionPerformed
 
     private void medicineModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineModuleModifyButtonActionPerformed

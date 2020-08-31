@@ -1,15 +1,17 @@
 
 package Class;
 
-public class Medicine {
-    private int id;
+import java.io.Serializable;
+
+public class Medicine implements Serializable{
+    private String id;
     private String medicineName;
     private int quantity;
     private double unitPrice;
     private String expiredDate;
 
     public Medicine(){}
-    public Medicine(int id, String medicineName, int quantity, double unitPrice, String expiredDate){
+    public Medicine(String id, String medicineName, int quantity, double unitPrice, String expiredDate){
         this.id = id;
         this.medicineName = medicineName;
         this.quantity = quantity;
@@ -17,11 +19,11 @@ public class Medicine {
         this.expiredDate = expiredDate;
     }
     
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
