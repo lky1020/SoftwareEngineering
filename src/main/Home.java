@@ -27,6 +27,7 @@ public class Home extends javax.swing.JFrame {
     private DefaultTableModel patientModel;
     private DefaultTableModel staffModel;
     private DefaultTableModel medicineModel;
+    private DefaultTableModel appointmentModel;
     private List<Patient> patientList = new ArrayList<>();
     private List<Patient> patientSearchList = new ArrayList<>();
     private List<Patient> patientOnHoldList = new ArrayList<>();
@@ -47,6 +48,12 @@ public class Home extends javax.swing.JFrame {
     private List<Medicine> medicineList = new ArrayList<>();
     private List<Medicine> medicineSearchList = new ArrayList<>();
 
+    private Appointment appointment;
+    private Appointment modifyAppointment;
+    private AppointmentValidation aValidate = new AppointmentValidation();
+    private List<Appointment> appointmentList = new ArrayList<>();
+    private List<Appointment> appointmentSearchList = new ArrayList<>();
+    
     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
 
     /**
@@ -169,6 +176,14 @@ public class Home extends javax.swing.JFrame {
         appointmentsModulePatientNameTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         appointmentsModulePatientMobileNoTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
         appointmentsModuleStaffInchargeTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        appointmentsModulePatientICTextField.setBackground(new java.awt.Color(0, 0, 0, 1));
+        
+        appointmentsModuleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //read and show Medicine Records
+        readAppointmentDataFromFile();
+        appointmentModel = (DefaultTableModel)appointmentsModuleTable.getModel();
+        setAppointmentModelRow(appointmentList);
 
         //Medicine Module
         //set the background to transparent
@@ -333,6 +348,69 @@ public class Home extends javax.swing.JFrame {
         medicineModuleMedicineExpiredDateDateChooser.setCalendar(null);
     }
 
+    private void setAppointmentModelRow(List<Appointment> arrayList){
+
+        appointmentModel.setRowCount(0);
+        
+        for(int i = 0; i < arrayList.size(); i++){
+            
+             appointmentModel.addRow(new Object[]{i + 1, arrayList.get(i).getIcNo(), arrayList.get(i).getPatientName(), arrayList.get(i).getPatientMobileNo(), arrayList.get(i).getStaffIncharge(), arrayList.get(i).getAppointmentDate()});
+        
+        }   
+    }
+    
+    private void saveAppointmentDataToFile(){
+        try {
+            
+            File file = new File("appointment.dat");
+            System.out.println("***TRACE SAVE: " + file.getAbsolutePath());
+            ObjectOutputStream ooStream = new ObjectOutputStream(new FileOutputStream(file));
+            ooStream.writeObject(appointmentList);
+            ooStream.close();
+            
+          } catch (FileNotFoundException ex) {
+              
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          } catch (IOException ex) {
+              
+            JOptionPane.showMessageDialog(null, "Cannot save to file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+          }
+    }
+    
+    private void readAppointmentDataFromFile(){
+        try {
+            File file = new File("appointment.dat");
+            System.out.println("***TRACE READ: " + file.getAbsolutePath());
+            ObjectInputStream oiStream = new ObjectInputStream(new FileInputStream(file));
+            appointmentList = (ArrayList) (oiStream.readObject());
+            oiStream.close();
+
+        } catch (FileNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "File not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (IOException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Cannot read from file", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        } catch (ClassNotFoundException ex) {
+            
+            JOptionPane.showMessageDialog(null, "Class not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            
+        }
+    }
+    
+    public void clearAppointmentModuleInputField(){
+        //Clear Input Field
+        appointmentsModulePatientNameTextField.setText("");
+        appointmentsModulePatientMobileNoTextField.setText("");
+        appointmentsModuleStaffInchargeTextField.setText("");
+        appointmentsModulePatientICTextField.setText("");
+        appointmentsModuleAppointmentDateDateChooser.setCalendar(null);
+    }
+    
     public boolean validateIcNo(String icNo, String action) {
 
         Pattern pattern = Pattern.compile("\\d{4}");
@@ -725,6 +803,8 @@ public class Home extends javax.swing.JFrame {
         appointmentsModuleModifyButton = new javax.swing.JButton();
         appointmentsModuleSearchButton = new javax.swing.JButton();
         appointmentsModuleDeleteButton = new javax.swing.JButton();
+        appointmentsModulePatientICLabel = new javax.swing.JLabel();
+        appointmentsModulePatientICTextField = new javax.swing.JTextField();
         medicineModule = new javax.swing.JPanel();
         medicineModuleScrollPane = new javax.swing.JScrollPane();
         medicineModuleTable = new javax.swing.JTable();
@@ -1314,7 +1394,7 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(patientsModuleNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
                                 .addComponent(patientsModuleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(101, Short.MAX_VALUE))
+                        .addContainerGap(133, Short.MAX_VALUE))
                     .addGroup(patientsModuleLayout.createSequentialGroup()
                         .addComponent(patientsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(85, 85, 85)
@@ -1481,46 +1561,64 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        appointmentsModulePatientICLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
+        appointmentsModulePatientICLabel.setForeground(new java.awt.Color(51, 51, 51));
+        appointmentsModulePatientICLabel.setText("Patient's IC :");
+
+        appointmentsModulePatientICTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
+        appointmentsModulePatientICTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        appointmentsModulePatientICTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appointmentsModulePatientICTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout appointmentsModuleLayout = new javax.swing.GroupLayout(appointmentsModule);
         appointmentsModule.setLayout(appointmentsModuleLayout);
         appointmentsModuleLayout.setHorizontalGroup(
             appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(appointmentsModuleScrollPane))
+            .addGroup(appointmentsModuleLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                        .addComponent(appointmentsModulePatientNameLabel)
+                        .addComponent(appointmentsModulePatientICLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(appointmentsModulePatientNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(appointmentsModulePatientICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                        .addComponent(appointmentsModuleStaffInchargeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(85, 85, 85)
-                        .addComponent(appointmentsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(31, 31, 31)
-                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                        .addComponent(appointmentsModulePatientMobileNoLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(appointmentsModulePatientMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                            .addGap(58, 58, 58)
-                            .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                            .addComponent(appointmentsModuleAppointmentDateLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(appointmentsModuleAppointmentDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(appointmentsModuleLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(appointmentsModuleScrollPane))
+                        .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                                .addComponent(appointmentsModulePatientNameLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(appointmentsModulePatientNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                                .addComponent(appointmentsModuleStaffInchargeLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(87, 87, 87)
+                                .addComponent(appointmentsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(31, 31, 31)
+                        .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                                .addComponent(appointmentsModulePatientMobileNoLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(appointmentsModulePatientMobileNoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                                    .addGap(58, 58, 58)
+                                    .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(appointmentsModuleLayout.createSequentialGroup()
+                                    .addComponent(appointmentsModuleAppointmentDateLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(appointmentsModuleAppointmentDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         appointmentsModuleLayout.setVerticalGroup(
             appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1538,15 +1636,19 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(appointmentsModuleStaffInchargeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(appointmentsModuleStaffInchargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(appointmentsModuleAppointmentDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(27, 27, 27)
+                .addGap(12, 12, 12)
+                .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(appointmentsModulePatientICLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(appointmentsModulePatientICTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(appointmentsModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(appointmentsModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(appointmentsModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(appointmentsModuleSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(appointmentsModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
+                .addGap(18, 18, 18)
                 .addComponent(appointmentsModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
+                .addGap(24, 24, 24))
         );
 
         methodPanel.add(appointmentsModule, "card3");
@@ -1702,7 +1804,7 @@ public class Home extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(medicineModuleMedicineExpiredDateDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(medicineModuleMedicineQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                        .addComponent(medicineModuleMedicineQuantityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(medicineModuleLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
@@ -1736,7 +1838,7 @@ public class Home extends javax.swing.JFrame {
                     .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(medicineModuleMedicineUnitPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(medicineModuleMedicineUnitPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 33, Short.MAX_VALUE)
+                .addGap(0, 36, Short.MAX_VALUE)
                 .addGroup(medicineModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(medicineModuleAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(medicineModuleModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1905,7 +2007,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(staffModuleLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(staffModuleStaffDesignationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(staffModuleStaffDesignationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
                     .addGroup(staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(staffModuleStaffNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(staffModuleStaffNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1957,7 +2059,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comingSoonModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         methodPanel.add(comingSoonModule, "card5");
@@ -2677,10 +2779,95 @@ public class Home extends javax.swing.JFrame {
 
     private void appointmentsModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appointmentsModuleTableMouseClicked
         // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) appointmentsModuleTable.getModel();
+        int index = appointmentsModuleTable.getSelectedRow();
+
+        int icNo = Integer.parseInt(model.getValueAt(index, 1).toString());
+        String name = model.getValueAt(index, 2).toString();
+        
+        //set Medical Description of Patient
+        for(int i = 0; i < appointmentList.size(); i++){
+            if(appointmentList.get(i).getIcNo() == icNo && appointmentList.get(i).getPatientName().equals(name)){
+                appointment = appointmentList.get(i);
+            }
+        }
     }//GEN-LAST:event_appointmentsModuleTableMouseClicked
 
     private void appointmentsModuleAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleAddButtonActionPerformed
         // TODO add your handling code here:
+        if(appointmentsModulePatientNameTextField.getText().equals("") && appointmentsModulePatientMobileNoTextField.getText().equals("") &&
+            appointmentsModuleStaffInchargeTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Patient Name, Mobile No., Staff Incharge of Appointment !!!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(appointmentsModulePatientNameTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Patient Name for the Appointment !!!", "Invalid Patient Name", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(appointmentsModulePatientMobileNoTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Mobile number for the appointment !!!", "Invalid Mobile Number", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(appointmentsModuleStaffInchargeTextField.getText().equals("")){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Staff Incharge for the appointment !!!", "Invalid Staff Incharge", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        else if(appointmentsModuleAppointmentDateDateChooser.getDate() == null){
+            
+            JOptionPane.showMessageDialog(null, "Please Enter Appointment Date !!!", "Invalid Appointment Date", JOptionPane.ERROR_MESSAGE);
+            patientsModuleDateCreatedDateChooser.setDate(null);
+        }
+        else{
+            
+            //validate input
+            if(aValidate.validateIc(appointmentsModulePatientICTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+            
+            }
+            else if(aValidate.validateName(appointmentsModulePatientNameTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Patient Name, Please Enter Again !!!", "Invalid Patient Name", JOptionPane.ERROR_MESSAGE);
+            
+            }
+            else if(aValidate.validateName(appointmentsModuleStaffInchargeTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Staff Name, Please Enter Again !!!", "Invalid Staff Name", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else if(aValidate.validateMobileNo(appointmentsModulePatientMobileNoTextField.getText()) != true){
+                
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again !!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                
+            }
+            else{
+                int icNo = Integer.parseInt(appointmentsModulePatientICTextField.getText().substring(10));
+
+                appointment = new Appointment(icNo, appointmentsModulePatientNameTextField.getText(), appointmentsModulePatientMobileNoTextField.getText(), appointmentsModuleStaffInchargeTextField.getText(), s.format(appointmentsModuleAppointmentDateDateChooser.getDate()));
+
+                int addRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Sure to Add This Record ?</b> </html>\n" + appointment, "Add Appointment's Record", JOptionPane.YES_NO_OPTION);
+
+                if(addRecord == 0){
+
+                    appointmentList.add(appointment);
+                    saveAppointmentDataToFile();
+                    JOptionPane.showMessageDialog(null, "Appointment Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                    setAppointmentModelRow(appointmentList);
+
+                }else{
+                    
+                    JOptionPane.showMessageDialog(null, "Cancel Add Appointment's Record", "Cancel Adding", JOptionPane.INFORMATION_MESSAGE);
+                
+                }
+                
+                clearAppointmentModuleInputField();
+            }
+
+        }
     }//GEN-LAST:event_appointmentsModuleAddButtonActionPerformed
 
     private void appointmentsModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleModifyButtonActionPerformed
@@ -2689,10 +2876,411 @@ public class Home extends javax.swing.JFrame {
 
     private void appointmentsModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleSearchButtonActionPerformed
         // TODO add your handling code here:
+        //IC only
+        if(!patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+ 
+            if(validate.validateIc(patientsModuleICTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Name Only
+        else if(patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+
+            if(validate.validateName(patientsModuleNameTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleNameTextField.getText().equals(patientList.get(i).getName())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Mobile No Only
+        else if(patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            if(validate.validateMobileNo(patientsModuleMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //Date Created Only
+        else if(patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && !(patientsModuleDateCreatedDateChooser.getDate() == null)){
+            
+            if(validate.validateDateCreated(s.format(patientsModuleDateCreatedDateChooser.getDate()))){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(s.format(patientsModuleDateCreatedDateChooser.getDate()).equals(patientList.get(i).getDateCreated())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Invalid Date Created Format, Please Enter Again!!! \n Format : dd-MM-yyyy", "Invalid Date Created Format", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        //IC, Name, Mobile No
+        else if(!patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            if(validate.validateIc(patientsModuleICTextField.getText()) && validate.validateName(patientsModuleNameTextField.getText()) && validate.validateMobileNo(patientsModuleMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc()) && patientsModuleNameTextField.getText().equals(patientList.get(i).getName()) && patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate.validateIc(patientsModuleICTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateName(patientsModuleNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateMobileNo(patientsModuleMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+            }
+        }
+        //IC, Name, Mobile No, Date Created
+        else if(!patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && !(patientsModuleDateCreatedDateChooser.getDate() == null)){
+            
+            if(validate.validateIc(patientsModuleICTextField.getText()) && validate.validateName(patientsModuleNameTextField.getText()) && validate.validateMobileNo(patientsModuleMobileNoTextField.getText()) && validate.validateDateCreated(s.format(patientsModuleDateCreatedDateChooser.getDate()))){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc()) && patientsModuleNameTextField.getText().equals(patientList.get(i).getName()) && patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo()) && s.format(patientsModuleDateCreatedDateChooser.getDate()).equals(patientList.get(i).getDateCreated())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate.validateIc(patientsModuleICTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateName(patientsModuleNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateMobileNo(patientsModuleMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateDateCreated(s.format(patientsModuleDateCreatedDateChooser.getDate())) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Date Created Format, Please Enter Again!!! \n Format : dd-MM-yyyy", "Invalid Date Created Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        //IC, Name
+        else if(!patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            if(validate.validateIc(patientsModuleICTextField.getText()) && validate.validateName(patientsModuleNameTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc()) && patientsModuleNameTextField.getText().equals(patientList.get(i).getName())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate.validateIc(patientsModuleICTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateName(patientsModuleNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+
+            }
+        }
+        //IC, Mobile No
+        else if(!patientsModuleICTextField.getText().equals("") && patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            if(validate.validateIc(patientsModuleICTextField.getText()) && validate.validateMobileNo(patientsModuleMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleICTextField.getText().equals(patientList.get(i).getIc()) && patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate.validateIc(patientsModuleICTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid IC Format, Please Enter Again !!! \n Format : xxxxxx-xx-xxxx", "Invalid IC Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateMobileNo(patientsModuleMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        //Name, Mobile No
+        else if(patientsModuleICTextField.getText().equals("") && !patientsModuleNameTextField.getText().equals("") && !patientsModuleMobileNoTextField.getText().equals("") && patientsModuleDateCreatedDateChooser.getDate() == null){
+            
+            if(validate.validateName(patientsModuleNameTextField.getText()) && validate.validateMobileNo(patientsModuleMobileNoTextField.getText())){
+                boolean recordFound = false;
+
+                for(int i = 0; i < patientList.size(); i++){
+
+                    if(patientsModuleNameTextField.getText().equals(patientList.get(i).getName()) && patientsModuleMobileNoTextField.getText().equals(patientList.get(i).getMobileNo())){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        patientSearchList.add(patientList.get(i));
+
+                    }
+                }
+
+                setPatientModelRow(patientSearchList);
+                //clear all the patientSearchList's record
+                patientSearchList.clear();
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+            }else{
+                
+                if(validate.validateName(patientsModuleNameTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if(validate.validateMobileNo(patientsModuleMobileNoTextField.getText()) != true){
+                    
+                    JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+  
+            }
+        }
+        else{
+
+            String icNo = JOptionPane.showInputDialog("Please Enter IC No to Search Records (Empty to Search All): ");
+
+            
+            if(icNo == null || icNo.equals("")){
+
+                setAppointmentModelRow(appointmentList);
+
+            }else /*if(validateIcNo(icNo, "search"))*/{
+
+                boolean recordFound = false;
+
+                for(int i = 0; i < appointmentList.size(); i++){
+
+                    if(Integer.parseInt(icNo) == appointmentList.get(i).getIcNo()){
+                        recordFound = true;
+
+                        //Add to the patientSearchList for display purpose
+                        appointmentSearchList.add(appointmentList.get(i));
+                        
+                    }
+                }
+
+                setAppointmentModelRow(appointmentSearchList);
+                //clear all the patientSearchList's record
+                appointmentSearchList.clear();
+
+
+                if(recordFound != true){
+                     JOptionPane.showMessageDialog(null, "No Record Found !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
     }//GEN-LAST:event_appointmentsModuleSearchButtonActionPerformed
 
     private void appointmentsModuleDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleDeleteButtonActionPerformed
         // TODO add your handling code here:
+        if(appointment != null){
+
+            for(int i = 0; i < appointmentList.size(); i++){
+
+                if(appointment.getIcNo() == appointmentList.get(i).getIcNo()){
+
+                    int deleteRecord = JOptionPane.showConfirmDialog(null, "<html> <b>Record Found. Sure to delete ?</b> </html>\n" + appointmentList.get(i), "Appointment's Record Found", JOptionPane.YES_NO_OPTION);
+
+                    if(deleteRecord == 0){
+
+                         appointmentList.remove(appointmentList.get(i));
+                           saveAppointmentDataToFile();
+                            JOptionPane.showMessageDialog(null, "Appointment Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+                            setAppointmentModelRow(appointmentList);
+
+                    }else{
+
+                        JOptionPane.showMessageDialog(null, "Cancel Delete Appointment's Record", "Cancel Delete", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                }
+            }
+            
+        }else{
+            
+            JOptionPane.showMessageDialog(null, "No Record Selected !!!", "Record Not Found", JOptionPane.INFORMATION_MESSAGE);
+        
+        }
     }//GEN-LAST:event_appointmentsModuleDeleteButtonActionPerformed
 
     private void medicineModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicineModuleTableMouseClicked
@@ -3771,6 +4359,10 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_medicineModuleMedicineIDTextFieldActionPerformed
 
+    private void appointmentsModulePatientICTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModulePatientICTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_appointmentsModulePatientICTextFieldActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -3815,6 +4407,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel appointmentsModuleAppointmentDateLabel;
     private javax.swing.JButton appointmentsModuleDeleteButton;
     private javax.swing.JButton appointmentsModuleModifyButton;
+    private javax.swing.JLabel appointmentsModulePatientICLabel;
+    private javax.swing.JTextField appointmentsModulePatientICTextField;
     private javax.swing.JLabel appointmentsModulePatientMobileNoLabel;
     private javax.swing.JTextField appointmentsModulePatientMobileNoTextField;
     private javax.swing.JLabel appointmentsModulePatientNameLabel;

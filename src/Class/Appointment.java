@@ -1,7 +1,9 @@
 
 package Class;
 
-public class Appointment {
+import java.io.Serializable;
+
+public class Appointment implements Serializable{
     private int icNo;
     private String patientName;
     private String patientMobileNo;
