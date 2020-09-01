@@ -29,7 +29,7 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         initComponents();
     }
 
-    public PatientPaymentMedicine(String staffName, Patient patient, javax.swing.JFrame frame, List<Patient> patientOnHoldList){
+    public PatientPaymentMedicine(String staffName, Patient patient, javax.swing.JFrame frame, List<Patient> patientOnHoldList, List<Medicine> medicineAvailableList){
         initComponents();
         
         this.staffName = staffName;
@@ -47,14 +47,16 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         medicineGivenModel = (DefaultTableModel)patientPaymentMedicineMedicineGivenTable.getModel();
         
         //Hardcode medicine available
-        Medicine medicine1 = new Medicine("1001", "Panadol", 50, 10.00, "07-07-2023");
+        /*Medicine medicine1 = new Medicine("1001", "Panadol", 50, 10.00, "07-07-2023");
         medicineAvailableList.add(medicine1);
         Medicine medicine2 = new Medicine("1002", "Cough", 50, 12.00, "07-07-2021");
         medicineAvailableList.add(medicine2);
         Medicine medicine3 = new Medicine("1003", "Fewer", 50, 7.00, "21-06-2021");
         medicineAvailableList.add(medicine3);
         Medicine medicine4 = new Medicine("1004", "Sick", 50, 20.00, "20-11-2022");
-        medicineAvailableList.add(medicine4);
+        medicineAvailableList.add(medicine4);*/
+        
+        this.medicineAvailableList = medicineAvailableList;
         
         setMedicineAvailableModelRow(medicineAvailableList);
     }
@@ -65,7 +67,7 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         
         for(int i = 0; i < medicineAvailableList.size(); i++){
             
-             medicineAvailableModel.addRow(new Object[]{medicineAvailableList.get(i).getId(), medicineAvailableList.get(i).getMedicineName(), String.format("%05.2f", medicineAvailableList.get(i).getUnitPrice())});
+             medicineAvailableModel.addRow(new Object[]{medicineAvailableList.get(i).getId(), medicineAvailableList.get(i).getMedicineName(), String.format("%06.2f", medicineAvailableList.get(i).getUnitPrice())});
         
         }   
     }
@@ -76,7 +78,7 @@ public class PatientPaymentMedicine extends javax.swing.JFrame {
         
         for(int i = 0; i < medicineGiven.size(); i++){
             
-             medicineGivenModel.addRow(new Object[]{medicineGiven.get(i).getId(), medicineGiven.get(i).getMedicineName(), String.format("%05.2f", medicineGiven.get(i).getUnitPrice())});
+             medicineGivenModel.addRow(new Object[]{medicineGiven.get(i).getId(), medicineGiven.get(i).getMedicineName(), String.format("%06.2f", medicineGiven.get(i).getUnitPrice())});
         
         }   
     }

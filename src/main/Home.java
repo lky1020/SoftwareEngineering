@@ -276,7 +276,7 @@ public class Home extends javax.swing.JFrame {
         medicineModel.setRowCount(0);
 
         for (int i = 0; i < arrayList.size(); i++) {
-            medicineModel.addRow(new Object[]{i + 1, arrayList.get(i).getId(), arrayList.get(i).getMedicineName(), arrayList.get(i).getQuantity(), arrayList.get(i).getUnitPrice(), arrayList.get(i).getExpiredDate()});
+            medicineModel.addRow(new Object[]{i + 1, arrayList.get(i).getId(), arrayList.get(i).getMedicineName(), String.format("%03d", arrayList.get(i).getQuantity()), String.format("%06.2f", arrayList.get(i).getUnitPrice()), arrayList.get(i).getExpiredDate()});
 
         }
     }
@@ -3741,7 +3741,7 @@ public class Home extends javax.swing.JFrame {
                     if (paymentRecord == 0) {
 
                         //Patients Payment
-                        PatientPaymentMedicine patientPayment = new PatientPaymentMedicine(this.staffName, patientList.get(i), this, this.patientOnHoldList);
+                        PatientPaymentMedicine patientPayment = new PatientPaymentMedicine(this.staffName, patientList.get(i), this, this.patientOnHoldList, this.medicineList);
                         patientPayment.setVisible(true);
 
                         this.dispose();

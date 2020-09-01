@@ -86,8 +86,8 @@ public class PatientPayment extends javax.swing.JFrame {
         String priceStr = "";
         
         for(int i = 0; i < medicinePaymentList.size(); i++){
-            
-            if(medicinePaymentList.get(i).getId().equals(0)){
+
+            if(medicinePaymentList.get(i).getId().equals("0")){
                 if(medicinePaymentList.get(i).getMedicineName().equals("Total Before SST") || medicinePaymentList.get(i).getMedicineName().equals("Total After SST") && medicinePaymentList.get(i).getUnitPrice() != 0){
                     nameStr += "<html> <b>";
                     nameStr += medicinePaymentList.get(i).getMedicineName();
@@ -106,12 +106,12 @@ public class PatientPayment extends javax.swing.JFrame {
                     medicinePaymentModel.addRow(new Object[]{"", "", "", ""});
                 }
                 else{
-                    medicinePaymentModel.addRow(new Object[]{"", "", medicinePaymentList.get(i).getMedicineName(), String.format("%05.2f", medicinePaymentList.get(i).getUnitPrice())});
+                    medicinePaymentModel.addRow(new Object[]{"", "", medicinePaymentList.get(i).getMedicineName(), String.format("%06.2f", medicinePaymentList.get(i).getUnitPrice())});
                 }
                 
             }
             else{
-                medicinePaymentModel.addRow(new Object[]{i + 1 + ".", medicinePaymentList.get(i).getId(), medicinePaymentList.get(i).getMedicineName(), String.format("%05.2f", medicinePaymentList.get(i).getUnitPrice())});
+                medicinePaymentModel.addRow(new Object[]{i + 1 + ".", medicinePaymentList.get(i).getId(), medicinePaymentList.get(i).getMedicineName(), String.format("%06.2f", medicinePaymentList.get(i).getUnitPrice())});
             }
 
         }   
