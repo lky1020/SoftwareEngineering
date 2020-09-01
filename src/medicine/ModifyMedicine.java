@@ -339,7 +339,7 @@ public class ModifyMedicine extends javax.swing.JFrame {
         Home home = new Home(staffName, oldMedicine, medicine);
         home.setVisible(true);
         frame.dispose();
-        //this.dispose();
+        this.dispose();
     }//GEN-LAST:event_cancelBtn1ActionPerformed
 
     /**
