@@ -339,7 +339,7 @@ public class AppointmentModify extends javax.swing.JFrame {
             Home home = new Home(staffName, oldAppointment, appointment);
             home.setVisible(true);
             frame.dispose();
-            //this.dispose();
+            this.dispose();
         }
     }//GEN-LAST:event_modifyBtnActionPerformed
 
