@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.regex.*;
 import patient.*;
 import medicine.*;
+import appointment.*;
 import staff.staffModify;
 
 public class Home extends javax.swing.JFrame {
@@ -122,6 +123,29 @@ public class Home extends javax.swing.JFrame {
         saveMedicineDataToFile();
         JOptionPane.showMessageDialog(null, "Medicine Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
         setMedicineModelRow(medicineList);
+    }
+    
+    public Home(String staffName, Appointment appointment, Appointment modifyAppointment) {
+        initialize();
+
+        this.staffName = staffName;
+        greetLabel.setText(greetLabel.getText() + this.staffName);
+
+        this.appointment = appointment;
+        this.modifyAppointment = modifyAppointment;
+
+        for (int i = 0; i < appointmentList.size(); i++) {
+
+            if (appointment.getIcNo() == appointmentList.get(i).getIcNo()) {
+
+                appointmentList.set(i, this.modifyAppointment);
+
+            }
+        }
+
+        saveAppointmentDataToFile();
+        JOptionPane.showMessageDialog(null, "Appointment Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+        setAppointmentModelRow(appointmentList);
     }
 
     public Home(String staffName, Staff modifyStaff, Staff staff) {
@@ -2872,6 +2896,21 @@ public class Home extends javax.swing.JFrame {
 
     private void appointmentsModuleModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleModifyButtonActionPerformed
         // TODO add your handling code here:
+        if (appointment != null) {
+
+            int modifyAppointment = JOptionPane.showConfirmDialog(null, "<html> <b>Modify Following Appointment's Record ? </b> </html>\n" + appointment, "Patient's Record", JOptionPane.YES_NO_OPTION);
+
+            if (modifyAppointment == 0) {
+                AppointmentModify appointmentModify = new AppointmentModify(this.staffName, appointment, this);
+                appointmentModify.setVisible(true);
+                //this.dispose();
+            }
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "No Patient Selected !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+
+        }
     }//GEN-LAST:event_appointmentsModuleModifyButtonActionPerformed
 
     private void appointmentsModuleSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentsModuleSearchButtonActionPerformed
