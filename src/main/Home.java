@@ -165,7 +165,7 @@ public class Home extends javax.swing.JFrame {
             }
 
             saveStaffDataToFile();
-            JOptionPane.showMessageDialog(null, "Patient Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Staff Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
             setStaffModel(staffList);
         }
     }
@@ -930,9 +930,9 @@ public class Home extends javax.swing.JFrame {
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(greetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(236, 236, 236)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, topPanelLayout.createSequentialGroup()
@@ -981,7 +981,7 @@ public class Home extends javax.swing.JFrame {
         patientLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/pulse.png"))); // NOI18N
 
         patientLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
-        patientLabel.setText("Patients");
+        patientLabel.setText("Patient");
 
         patientHoverPanel.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -1033,7 +1033,7 @@ public class Home extends javax.swing.JFrame {
         appointmentsLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/appointment.png"))); // NOI18N
 
         appointmentsLabel.setFont(new java.awt.Font(".Heiti J", 0, 18)); // NOI18N
-        appointmentsLabel.setText("Appointments");
+        appointmentsLabel.setText("Appointment");
 
         appointmentsHoverPanel.setBackground(new java.awt.Color(255, 255, 255));
 

@@ -72,7 +72,7 @@ public class ModifyMedicine extends javax.swing.JFrame {
         modifyBtn = new javax.swing.JButton();
         cancelBtn1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         modifyTitleLabel.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         modifyTitleLabel.setText("Please Enter New Info For Modification");
@@ -190,6 +190,7 @@ public class ModifyMedicine extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void modifyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyBtnActionPerformed

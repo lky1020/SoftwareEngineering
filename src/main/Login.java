@@ -176,7 +176,7 @@ public class Login extends javax.swing.JFrame {
             }
             else if(invalidUser >= 3){
                 
-                JOptionPane.showMessageDialog(null, "Access Denied !!! Please contact Owner", "Acces Denied", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Access Denied !!! Please contact Owner", "Access Denied", JOptionPane.ERROR_MESSAGE);
                 
             }
             else{
@@ -184,6 +184,7 @@ public class Login extends javax.swing.JFrame {
                 Home home = new Home(jtfUsername.getText());
                 home.setVisible(true);
                 this.dispose();
+                
             }
         }
     }

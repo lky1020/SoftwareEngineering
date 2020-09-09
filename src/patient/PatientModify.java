@@ -415,6 +415,9 @@ public class PatientModify extends javax.swing.JFrame {
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
+        
+        JOptionPane.showMessageDialog(null, "Patient's Record Cancel Modify!!!", "Cancel Modification", JOptionPane.INFORMATION_MESSAGE);
+        
         Home home = new Home(staffName, patientOnHoldList);
         home.setVisible(true);
         frame.dispose();

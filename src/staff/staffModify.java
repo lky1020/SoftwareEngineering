@@ -58,10 +58,6 @@ public class staffModify extends javax.swing.JFrame {
         
     }
 
-    public staffModify(String staffName, Staff staff, Home aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,7 +83,7 @@ public class staffModify extends javax.swing.JFrame {
         modifyButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setText("Enter the information that you modify");
 
@@ -206,6 +202,7 @@ public class staffModify extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void mobileNoNewTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mobileNoNewTextFieldActionPerformed
@@ -406,13 +403,14 @@ public class staffModify extends javax.swing.JFrame {
     }//GEN-LAST:event_modifyButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-            // TODO add your handling code here:
-       Home home = new Home(staffName, modifyStaff, staff);
+        // TODO add your handling code here:
+        Home home = new Home(staffName, modifyStaff, staff);
         home.setVisible(true);
         frame.dispose();
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
-static int xx, yy;
+
+    static int xx, yy;
     private void frameTitleMousePressed(java.awt.event.MouseEvent evt) {                                        
         // TODO add your handling code here:
         xx = evt.getX();
