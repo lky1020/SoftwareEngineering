@@ -94,7 +94,7 @@ public class PatientPayment extends javax.swing.JFrame {
                     nameStr += "</b> </html>";
                     
                     priceStr += "<html> <b>";
-                    priceStr += String.format("%05.2f", medicinePaymentList.get(i).getUnitPrice());
+                    priceStr += String.format("%06.2f", medicinePaymentList.get(i).getUnitPrice());
                     priceStr += "</b> </html>";
                     
                     medicinePaymentModel.addRow(new Object[]{"", "", nameStr, priceStr});
