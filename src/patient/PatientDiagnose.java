@@ -79,7 +79,7 @@ public class PatientDiagnose extends javax.swing.JFrame {
         patientDiagnoseMedicalDescriptionScrollPane.setViewportView(patientDiagnoseMedicalDescriptionTextArea);
 
         patientDiagnoseMedicalDescriptionLabel.setFont(new java.awt.Font(".Heiti J", 1, 18)); // NOI18N
-        patientDiagnoseMedicalDescriptionLabel.setText("Medical Description");
+        patientDiagnoseMedicalDescriptionLabel.setText("Medical History");
         patientDiagnoseMedicalDescriptionLabel.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         patientDiagnoseEditButton.setFont(new java.awt.Font(".Heiti J", 1, 14)); // NOI18N
