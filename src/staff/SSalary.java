@@ -34,6 +34,7 @@ public class SSalary extends javax.swing.JFrame {
     private String staffName;//to recrod the staff name
     private List<Salary> salaryList = new ArrayList<>();
     private Salary salary;
+    private SalaryValidation validate;
      SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
    
     
@@ -253,6 +254,26 @@ public class SSalary extends javax.swing.JFrame {
           else if(salaryTextField.getText().equals("")){
                     JOptionPane.showMessageDialog(null, "Please Enter salary of staff !!!", "Invalid Mobile No", JOptionPane.ERROR_MESSAGE);
                     }
+           else {
+
+            //validate input
+            if (validate.validateID(idTextField.getText()) != true) {
+
+                JOptionPane.showMessageDialog(null, "Invalid Id Format, Please Enter Again !!! \n Format : xxxxx", "Invalid Id Format", JOptionPane.ERROR_MESSAGE);
+
+            } else if (validate.validateName(nameTextField.getText()) != true) {
+
+                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
+
+            } else if (validate.validateDesignation(deTextField.getText()) != true) {
+
+                JOptionPane.showMessageDialog(null, "Invalid Designation Format, Please Enter Again!!! \n Format :xxxxx", "Invalid Designation Format", JOptionPane.ERROR_MESSAGE);
+
+            } else if (validate.validateMobileNo(moTextField.getText()) != true) {
+
+                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
+
+            } 
          else {
 
            
@@ -280,7 +301,7 @@ public class SSalary extends javax.swing.JFrame {
                 clearSalaryModuleInputField();
           }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
           this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
