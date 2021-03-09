@@ -20,6 +20,7 @@ import java.util.regex.*;
 import patient.*;
 import medicine.*;
 import appointment.*;
+import staff.SSalary;
 import staff.staffModify;
 
 public class Home extends javax.swing.JFrame {
@@ -43,6 +44,8 @@ public class Home extends javax.swing.JFrame {
     private StaffValidation validate1 = new StaffValidation();
     private Staff modifyStaff;
     private Staff staff;
+    private SSalary salary;
+    private List<Salary> salaryList=new ArrayList<>();
     private Medicine medicine;
     private Medicine modifyMedicine;
     private MedicineValidation mValidate = new MedicineValidation();
@@ -56,6 +59,7 @@ public class Home extends javax.swing.JFrame {
     private List<Appointment> appointmentSearchList = new ArrayList<>();
     
     SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
+ 
 
     /**
      * Creates new form Home
@@ -161,8 +165,10 @@ public class Home extends javax.swing.JFrame {
 
             if (staff.getId() == (staffList.get(i).getId()) && staff.getName().equals(staffList.get(i).getName()) && staff.getDesignation().equals(staffList.get(i).getDesignation()) && staff.getMobileNo().equals(staffList.get(i).getMobileNo())) {
                 staffList.set(i, this.modifyStaff);
-
             }
+            else if (staff.getId() == (staffList.get(i).getId()) && staff.getName().equals(staffList.get(i).getName()) && staff.getDesignation().equals(staffList.get(i).getDesignation()) && staff.getMobileNo().equals(staffList.get(i).getMobileNo())){
+            }
+            
 
             saveStaffDataToFile();
             JOptionPane.showMessageDialog(null, "Staff Records Updated !!!", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
@@ -863,6 +869,7 @@ public class Home extends javax.swing.JFrame {
         staffModuleDeleteButton = new javax.swing.JButton();
         staffModuleStaffDesignationLabel = new javax.swing.JLabel();
         staffModuleStaffDesignationTextField = new javax.swing.JTextField();
+        staffModuleSalaryButton = new javax.swing.JButton();
         comingSoonModule = new javax.swing.JPanel();
         comingSoonModuleLogo = new javax.swing.JLabel();
         comingSoonModuleLabel = new javax.swing.JLabel();
@@ -1983,6 +1990,13 @@ public class Home extends javax.swing.JFrame {
         staffModuleStaffDesignationTextField.setFont(new java.awt.Font(".Heiti J", 0, 14)); // NOI18N
         staffModuleStaffDesignationTextField.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
+        staffModuleSalaryButton.setText("Salary");
+        staffModuleSalaryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                staffModuleSalaryButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout staffModuleLayout = new javax.swing.GroupLayout(staffModule);
         staffModule.setLayout(staffModuleLayout);
         staffModuleLayout.setHorizontalGroup(
@@ -2025,6 +2039,10 @@ public class Home extends javax.swing.JFrame {
             .addGroup(staffModuleLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(staffModuleScrollPane))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffModuleLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(staffModuleSalaryButton)
+                .addGap(31, 31, 31))
         );
         staffModuleLayout.setVerticalGroup(
             staffModuleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2054,7 +2072,9 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(staffModuleDeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addComponent(staffModuleScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
+                .addGap(20, 20, 20)
+                .addComponent(staffModuleSalaryButton)
+                .addContainerGap())
         );
 
         methodPanel.add(staffModule, "card5");
@@ -2083,7 +2103,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(comingSoonModuleLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comingSoonModuleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
 
         methodPanel.add(comingSoonModule, "card5");
@@ -4402,6 +4422,24 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_appointmentsModulePatientICTextFieldActionPerformed
 
+    private void staffModuleSalaryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffModuleSalaryButtonActionPerformed
+          if (staff != null) {
+
+            int paySalary = JOptionPane.showConfirmDialog(null, "<html> <b>Pay Salary Following Staff's ? </b> </html>\n" + staff, "Staff's Record", JOptionPane.YES_NO_OPTION);
+
+            if (paySalary== 0) {
+                SSalary ss = new SSalary(this.staffName,this);
+                ss.setVisible(true);
+                this.dispose();
+            }
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "No staff Selected !!!", "Notice", JOptionPane.INFORMATION_MESSAGE);
+
+        }
+    }//GEN-LAST:event_staffModuleSalaryButtonActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -4525,6 +4563,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton staffModuleAddButton;
     private javax.swing.JButton staffModuleDeleteButton;
     private javax.swing.JButton staffModuleModifyButton;
+    private javax.swing.JButton staffModuleSalaryButton;
     private javax.swing.JScrollPane staffModuleScrollPane;
     private javax.swing.JButton staffModuleSearchButton;
     private com.toedter.calendar.JDateChooser staffModuleStaffDateJoinedDateChooser;
