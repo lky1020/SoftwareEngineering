@@ -35,6 +35,7 @@ public class SSalary extends javax.swing.JFrame {
     private List<Salary> salaryList = new ArrayList<>();
     private Salary salary;
     private SalaryValidation validate;
+     private javax.swing.JFrame frame;
      SimpleDateFormat s = new SimpleDateFormat("dd-MM-yyyy");
    
     
@@ -53,6 +54,10 @@ public class SSalary extends javax.swing.JFrame {
        // nameTextField.setText(salary.getName());
         //moTextField.setText(salary.getMobileNo());
         //salaryTextField.setText(myString1);
+        
+        readstaffDataFromFile();
+        salaryModel = (DefaultTableModel) SalaryModuleTable.getModel();
+        setsalaryModel(salaryList);
     }
 
     private SSalary() {
@@ -85,8 +90,8 @@ public class SSalary extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        SalaryModuleTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,7 +105,7 @@ public class SSalary extends javax.swing.JFrame {
 
         jLabel5.setText("MobileNo:");
 
-        jLabel6.setText("jLabel6");
+        jLabel6.setText("Salary:");
 
         jButton1.setText("Pay");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +135,7 @@ public class SSalary extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        SalaryModuleTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -138,51 +143,53 @@ public class SSalary extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        SalaryModuleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SalaryModuleTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(SalaryModuleTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(nameTextField)
+                            .addComponent(deTextField)
+                            .addComponent(salaryTextField)
+                            .addComponent(moTextField)
+                            .addComponent(idTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(24, 24, 24))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addGap(7, 7, 7))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addGap(24, 24, 24))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton4)
                         .addGap(279, 279, 279))))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(169, 169, 169)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(53, 53, 53)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(38, 38, 38)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(nameTextField)
-                                    .addComponent(deTextField)
-                                    .addComponent(salaryTextField)
-                                    .addComponent(moTextField)
-                                    .addComponent(idTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE))
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,9 +222,9 @@ public class SSalary extends javax.swing.JFrame {
                     .addComponent(jButton2))
                 .addGap(11, 11, 11)
                 .addComponent(jButton4)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(1, 1, 1)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
                 .addComponent(jButton3)
                 .addContainerGap(162, Short.MAX_VALUE))
         );
@@ -254,31 +261,9 @@ public class SSalary extends javax.swing.JFrame {
           else if(salaryTextField.getText().equals("")){
                     JOptionPane.showMessageDialog(null, "Please Enter salary of staff !!!", "Invalid Mobile No", JOptionPane.ERROR_MESSAGE);
                     }
-           else {
-
-            //validate input
-            if (validate.validateID(idTextField.getText()) != true) {
-
-                JOptionPane.showMessageDialog(null, "Invalid Id Format, Please Enter Again !!! \n Format : xxxxx", "Invalid Id Format", JOptionPane.ERROR_MESSAGE);
-
-            } else if (validate.validateName(nameTextField.getText()) != true) {
-
-                JOptionPane.showMessageDialog(null, "Invalid Name, Please Enter Again Entered !!!", "Invalid Name", JOptionPane.ERROR_MESSAGE);
-
-            } else if (validate.validateDesignation(deTextField.getText()) != true) {
-
-                JOptionPane.showMessageDialog(null, "Invalid Designation Format, Please Enter Again!!! \n Format :xxxxx", "Invalid Designation Format", JOptionPane.ERROR_MESSAGE);
-
-            } else if (validate.validateMobileNo(moTextField.getText()) != true) {
-
-                JOptionPane.showMessageDialog(null, "Invalid Mobile No Format, Please Enter Again!!! \n Format : xxx-xxxxxxx", "Invalid Mobile No Format", JOptionPane.ERROR_MESSAGE);
-
-            } 
-         else {
-
-           
+ 
+             else {
                 int id1 = Integer.parseInt(idTextField.getText());
-                Date dateJoined = new Date();
                 double Salary=Double.parseDouble(salaryTextField.getText());
 
                 salary = new Salary(id1, nameTextField.getText(), deTextField.getText(),moTextField.getText(),Salary);
@@ -299,11 +284,12 @@ public class SSalary extends javax.swing.JFrame {
                 }
 
                 clearSalaryModuleInputField();
-          }
+             
     }//GEN-LAST:event_jButton1ActionPerformed
-    }
+   }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-          this.dispose();
+
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -346,7 +332,7 @@ public class SSalary extends javax.swing.JFrame {
             // set columns name to the jtable model
             String firstLine = br.readLine().trim();
             String[] columnsName = firstLine.split(",");
-            DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+            DefaultTableModel model = (DefaultTableModel)SalaryModuleTable.getModel();
             model.setColumnIdentifiers(columnsName);
             
             // get lines from txt file
@@ -366,6 +352,23 @@ public class SSalary extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void SalaryModuleTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalaryModuleTableMouseClicked
+         DefaultTableModel model = (DefaultTableModel) SalaryModuleTable.getModel();
+        int index = SalaryModuleTable.getSelectedRow();
+
+        int id = Integer.parseInt(model.getValueAt(index, 1).toString());
+        //String id = model.getValueAt(index, 2).toString();
+        String name = model.getValueAt(index, 2).toString();
+        String designation = model.getValueAt(index, 3).toString();
+
+        //set Medical Description of Patient
+        for (int i = 0; i < salaryList.size(); i++) {
+            if (salaryList.get(i).getId() == id && salaryList.get(i).getName().equals(name)) {
+                salary = salaryList.get(i);
+            }
+        }
+    }//GEN-LAST:event_SalaryModuleTableMouseClicked
     
     private void setsalaryModel(List<Salary> arrayList) {
 
@@ -480,6 +483,7 @@ public class SSalary extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable SalaryModuleTable;
     private javax.swing.JTextField deTextField;
     private javax.swing.JTextField idTextField;
     private javax.swing.JButton jButton1;
@@ -492,8 +496,7 @@ public class SSalary extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField moTextField;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JTextField salaryTextField;
